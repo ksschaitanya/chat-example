@@ -21,7 +21,27 @@
     </form>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <input type="file" onchange="encodeImageFileAsURL(this)" />
+    <hr>
+    <img id="img" />
+
+
     <script>
+      function encodeImageFileAsURL(element) {
+        var socket = io();
+      var file = element.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        socket.emit('sendImage', reader.result);
+        document.getElementById('img').setAttribute('src', reader.result);
+      }
+      socket.on('sendImage', function (msg) {
+        console.log('RESULT', msg); 
+        $('#img').setAttribute('src', msg);
+      });
+      reader.readAsDataURL(file);
+      }
+
       $(function () {
         var socket = io();
         $('form').submit(function(){
@@ -33,6 +53,10 @@
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
         });
+        socket.on('sendImage', function (msg) {
+        console.log('RESULT 222', msg); 
+        document.getElementById('img').setAttribute('src', msg);
+      });
       });
     </script>
   </body>
