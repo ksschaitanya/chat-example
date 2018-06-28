@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>QuikPic</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -12,6 +12,13 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
       #messages { margin-bottom: 40px }
+      #img {
+        padding: 4px;
+        border-radius: 4px;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #15b9ef  !important;
+        }
     </style>
   </head>
   <body>
@@ -23,7 +30,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <input type="file" onchange="encodeImageFileAsURL(this)" />
     <hr>
-    <img id="img" width="600" height="500" />
+    <img id="img"  style="width:100%" />
 
 
     <script>
@@ -55,7 +62,8 @@
         });
         socket.on('sendImage', function (msg) {
         console.log('RESULT 222', msg); 
-        document.getElementById('img').setAttribute('src', msg);
+        //document.getElementById('img').setAttribute('src', msg);
+        $('#img').setAttribute('src', msg);
       });
       });
     </script>
