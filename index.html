@@ -62,8 +62,8 @@
         });
         socket.on('sendImage', function (msg) {
         console.log('RESULT 222', msg); 
-        //document.getElementById('img').setAttribute('src', msg);
-        $('#img').setAttribute('src', msg);
+        document.getElementById('img').setAttribute('src', msg);
+        //$('#img').setAttribute('src', msg);
       });
       });
     </script>
