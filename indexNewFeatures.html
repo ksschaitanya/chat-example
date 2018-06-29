@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>QuikPic</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font: 13px Helvetica, Arial;
+    }
+
+    form {
+      background: #000;
+      padding: 3px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    form input {
+      border: 0;
+      padding: 10px;
+      width: 90%;
+      margin-right: .5%;
+    }
+
+    form button {
+      width: 9%;
+      background: rgb(130, 224, 255);
+      border: none;
+      padding: 10px;
+    }
+
+    #img {
+      padding: 4px;
+      border-radius: 4px;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #15b9ef !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <form action="">
+    <input id="m" autocomplete="off" />
+    <button>Send</button>
+  </form> -->
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <input type="file" onchange="encodeImageFileAsURL(this)" />
+  <input type="text" id="myText" value="">
+  <button onclick="myFunction()">Reload page</button>
+  <hr>
+  <img id="img" style="width:100%" />
+
+
+  <script>
+    function myFunction() {
+      var socket = io();
+      socket.emit('chat message', 'refresh');
+    }
+
+    function encodeImageFileAsURL(element) {
+      var socket = io();
+      var file = element.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        socket.emit('sendImage', reader.result);
+        document.getElementById('img').setAttribute('src', reader.result);
+      }
+      socket.on('sendImage', function (msg) {
+        console.log('RESULT', msg);
+        $('#img').setAttribute('src', msg);
+      });
+      reader.readAsDataURL(file);
+    }
+
+    $(function () {
+      var socket = io();
+      $('form').submit(function () {
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function (msg) {
+        var x = document.getElementById("myText").value;
+        if (msg === 'refresh' && x === 'key') {
+          location.reload();
+        }
+      });
+      socket.on('sendImage', function (msg) {
+        console.log('RESULT 222', msg);
+        document.getElementById('img').setAttribute('src', msg);
+      });
+    });
+  </script>
+</body>
+
+</html>
