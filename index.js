@@ -7,7 +7,8 @@ var port = process.env.PORT || 3002;
 
 app.get('/', function(req, res){
   //res.sendFile(__dirname + '/index.html');
-  res.sendFile(__dirname + '/indexNewFeatures.html');
+  //res.sendFile(__dirname + '/indexNewFeatures.html');
+  res.sendFile(__dirname + '/btindex.html');
 });
 
 io.on('connection', function(socket){
