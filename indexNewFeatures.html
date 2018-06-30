@@ -3,47 +3,8 @@
 
 <head>
   <title>QuikPic</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font: 13px Helvetica, Arial;
-    }
-
-    form {
-      background: #000;
-      padding: 3px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-
-    form input {
-      border: 0;
-      padding: 10px;
-      width: 90%;
-      margin-right: .5%;
-    }
-
-    form button {
-      width: 9%;
-      background: rgb(130, 224, 255);
-      border: none;
-      padding: 10px;
-    }
-
-    #img {
-      padding: 4px;
-      border-radius: 4px;
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #15b9ef !important;
-    }
-  </style>
+  <link href="appstyle.css" rel="stylesheet">
+  <link href="http://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -53,6 +14,16 @@
   </form> -->
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <div id="result"></div>
+  <br>
+  <button onclick="SetLogin(1)">Login</button>
+  <button onclick="SetLogin(0)">LogOut</button>
+  
+  <hr>
+
+  <div id="pnl1" class="hidden">
+
   <input type="file" onchange="encodeImageFileAsURL(this)" />
   <input type="text" id="myText" value="">
   <button onclick="myFunction()">Reload page</button>
@@ -66,6 +37,8 @@
   <hr>
   <img id="img" style="width:100%" />
 
+</div>
+  
 
   <script>
     function resetOrientation(srcBase64, srcOrientation, callback) {
@@ -136,6 +109,8 @@
     }
 
     $(function () {
+      document.getElementById("result").innerHTML = localStorage.getItem("session"); 
+
       var socket = io();
       $('form').submit(function () {
         socket.emit('chat message', $('#m').val());
@@ -147,12 +122,48 @@
         if (msg === 'refresh' && x === 'key') {
           location.reload();
         }
+        if (msg === 'setsession') {
+          localStorage.setItem("session", "user");
+          $('#pnl1').removeClass("hidden");
+          //location.reload();
+        }
+        if (msg === 'clearsession') {
+          localStorage.setItem("session", "");
+          $('#pnl1').addClass("hidden");
+          //location.reload();
+        }
       });
       socket.on('sendImage', function (msg) {
         console.log('RESULT 222', msg);
         document.getElementById('img').setAttribute('src', msg);
       });
     });
+
+    function SetLogin(param)
+    {
+      if (param === 1)
+      {
+        //localStorage.setItem("session", "user");
+        //$('#pnl1').removeClass("hidden");
+        socketSendCommand("setsession");
+      }
+      else
+      {
+        //localStorage.setItem("session", "");
+        //$('#pnl1').removeClass("hidden");
+        socketSendCommand("clearsession");
+      }
+    }
+
+    function socketSendCommand(command)
+    {
+      var socket = io();
+      socket.emit('chat message', command);
+        
+      
+    }
+
+
   </script>
 </body>
 
