@@ -109,8 +109,6 @@
     }
 
     $(function () {
-      document.getElementById("result").innerHTML = localStorage.getItem("session"); 
-
       var socket = io();
       $('form').submit(function () {
         socket.emit('chat message', $('#m').val());
@@ -125,11 +123,13 @@
         if (msg === 'setsession') {
           localStorage.setItem("session", "user");
           $('#pnl1').removeClass("hidden");
+          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
           //location.reload();
         }
         if (msg === 'clearsession') {
           localStorage.setItem("session", "");
           $('#pnl1').addClass("hidden");
+          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
           //location.reload();
         }
       });
