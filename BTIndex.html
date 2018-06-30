@@ -119,7 +119,7 @@
 
     </div>
 
-    <div id="ClientPanel">
+    <div id="ClientPanel" class="hidden">
 
         <div class="input-group">
             <input class="form-control form-control-lg" type="text" placeholder="Enter QuikPic Code">
@@ -138,127 +138,7 @@
     <script src="http://getbootstrap.com/docs/4.1/dist/js/bootstrap.min.js"></script>
     <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 
-    <script>
-        function resetOrientation(srcBase64, srcOrientation, callback) {
-            var img = new Image();
 
-            img.onload = function () {
-                var width = img.width,
-                    height = img.height,
-                    canvas = document.createElement('canvas'),
-                    ctx = canvas.getContext("2d");
-
-                // set proper canvas dimensions before transform & export
-                if (4 < srcOrientation && srcOrientation < 9) {
-                    canvas.width = height;
-                    canvas.height = width;
-                } else {
-                    canvas.width = width;
-                    canvas.height = height;
-                }
-
-                // transform context before drawing image
-                switch (srcOrientation) {
-                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
-                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
-                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
-                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-                    case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
-                    case 7: ctx.transform(0, -1, -1, 0, height, width); break;
-                    case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
-                    default: break;
-                }
-
-                // draw image
-                ctx.drawImage(img, 0, 0);
-
-                // export base64
-                callback(canvas.toDataURL());
-            };
-
-            img.src = srcBase64;
-        }
-
-        var originalImage = document.getElementById("img");
-
-
-        function RotateImage(dir) {
-            resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
-        }
-
-        function myFunction() {
-            var socket = io();
-            socket.emit('chat message', 'refresh');
-        }
-
-        function encodeImageFileAsURL(element) {
-            var socket = io();
-            var file = element.files[0];
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                socket.emit('sendImage', reader.result);
-                document.getElementById('img').setAttribute('src', reader.result);
-            }
-            socket.on('sendImage', function (msg) {
-                console.log('RESULT', msg);
-                $('#img').setAttribute('src', msg);
-            });
-            reader.readAsDataURL(file);
-        }
-
-        $(function () {
-            var socket = io();
-            $('form').submit(function () {
-                socket.emit('chat message', $('#m').val());
-                $('#m').val('');
-                return false;
-            });
-            socket.on('chat message', function (msg) {
-                var x = document.getElementById("myText").value;
-                if (msg === 'refresh' && x === 'key') {
-                    location.reload();
-                }
-                if (msg === 'setsession') {
-                    localStorage.setItem("session", "user");
-                    $('#pnl1').removeClass("hidden");
-                    document.getElementById("result").innerHTML = localStorage.getItem("session");
-                    //location.reload();
-                }
-                if (msg === 'clearsession') {
-                    localStorage.setItem("session", "");
-                    $('#pnl1').addClass("hidden");
-                    document.getElementById("result").innerHTML = localStorage.getItem("session");
-                    //location.reload();
-                }
-            });
-            socket.on('sendImage', function (msg) {
-                console.log('RESULT 222', msg);
-                document.getElementById('img').setAttribute('src', msg);
-            });
-        });
-
-        function SetLogin(param) {
-            if (param === 1) {
-                //localStorage.setItem("session", "user");
-                //$('#pnl1').removeClass("hidden");
-                socketSendCommand("setsession");
-            }
-            else {
-                //localStorage.setItem("session", "");
-                //$('#pnl1').removeClass("hidden");
-                socketSendCommand("clearsession");
-            }
-        }
-
-        function socketSendCommand(command) {
-            var socket = io();
-            socket.emit('chat message', command);
-
-
-        }
-
-
-    </script>
 
 </body>
 
