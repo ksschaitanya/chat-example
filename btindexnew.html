@@ -58,8 +58,8 @@
                         data-holder-rendered="true">
                     <div class="card-body">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" onchange="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
-                            <button type="button" class="btn btn-primary">Clear</button>
+                            <button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
+                            <input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" />
                             <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
                         </div>
                     </div>
@@ -165,12 +165,14 @@
                 if (msg === 'setsession') {
                     localStorage.setItem("session", "user");
                     $('#AdminPanel').removeClass("hidden");
+                    $('#ClientPanel').addClass("hidden");
                     document.getElementById("result").innerHTML = localStorage.getItem("session");
                     //location.reload();
                 }
                 if (msg === 'clearsession') {
                     localStorage.setItem("session", "");
-                    $('#ClientPanel').addClass("hidden");
+                    $('#ClientPanel').removeClass("hidden");
+                    $('#AdminPanel').addClass("hidden");
                     document.getElementById("result").innerHTML = localStorage.getItem("session");
                     //location.reload();
                 }
