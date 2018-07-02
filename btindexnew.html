@@ -27,15 +27,17 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-    <div id="AdminPanel" class="hidden1">
 
-        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal">QuikPic</h5>
-            <nav class="my-2 my-md-0 mr-md-3">
-                <a class="p-2 text-dark" id="result" href="#">u</a>
-            </nav>
-            <a class="btn btn-outline-primary" href="#" onclick="SetLogin(1)">Sign in</a>
-        </div>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <h5 class="my-0 mr-md-auto font-weight-normal">QuikPic</h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" id="result" href="#">u</a>
+        </nav>
+        <a class="btn btn-outline-primary" href="#" onclick="SetLogin(1)">Admin</a>
+        <a class="btn btn-outline-primary" href="#" onclick="SetLogin(0)">Client</a>
+    </div>
+
+    <div id="AdminPanel" class="hidden">
         <div class="container">
             <div class="card-deck mb-3 text-center">
                 <div class="card mb-4 box-shadow">
@@ -116,6 +118,7 @@
                 </div>
             </footer>
         </div>
+    </div>
 
     </div>
 
@@ -138,7 +141,59 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 
+   <script>
 
+   $(function () {
+      var socket = io();
+      $('form').submit(function () {
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function (msg) {
+        var x = document.getElementById("myText").value;
+        if (msg === 'refresh' && x === 'key') {
+          location.reload();
+        }
+
+        
+        if (msg === 'setsession') {
+          localStorage.setItem("session", "user");
+          $('#AdminPanel').removeClass("hidden");
+          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
+          //location.reload();
+        }
+        if (msg === 'clearsession') {
+          localStorage.setItem("session", "");
+          $('#ClientPanel').addClass("hidden");
+          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
+          //location.reload();
+        }
+      });
+      socket.on('sendImage', function (msg) {
+        console.log('RESULT 222', msg);
+        document.getElementById('img').setAttribute('src', msg);
+      });
+    });
+
+     function SetLogin(param)
+    {
+      if (param === 1)
+      {
+        socketSendCommand("setsession");
+      }
+      else
+      {
+        socketSendCommand("clearsession");
+      }
+    }
+
+    function socketSendCommand(command)
+    {
+      var socket = io();
+      socket.emit('chat message', command);
+    }
+   </script>
 
 </body>
 
