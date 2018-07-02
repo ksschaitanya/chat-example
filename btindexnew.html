@@ -13,6 +13,14 @@
         .hidden {
             visibility: collapse;
         }
+
+        #img {
+            padding: 4px;
+            border-radius: 4px;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #15b9ef !important;
+        }
     </style>
 
     <!-- Bootstrap core CSS -->
@@ -37,8 +45,9 @@
         <a class="btn btn-outline-primary" href="#" onclick="SetLogin(0)">Client</a>
     </div>
 
-    <div id="AdminPanel" class="hidden">
-        <div class="container">
+    <div class="container">
+
+        <div id="AdminPanel" class="hidden">
             <div class="card-deck mb-3 text-center">
                 <div class="card mb-4 box-shadow">
                     <div class="card-header">
@@ -49,9 +58,9 @@
                         data-holder-rendered="true">
                     <div class="card-body">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-primary">Change</button>
+                            <button type="button" onchange="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
                             <button type="button" class="btn btn-primary">Clear</button>
-                            <button type="button" class="btn btn-primary">Reset</button>
+                            <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -81,53 +90,53 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <footer class="pt-4 my-md-5 pt-md-5 border-top">
-                <div class="row">
-                    <div class="col-12 col-md">
-                        <img class="mb-2" src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-                        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
-                    </div>
-                    <div class="col-6 col-md">
-                        <h5>Features</h5>
-                        <ul class="list-unstyled text-small">
-                            <li>
-                                <a class="text-muted" href="#">Cool stuff</a>
-                            </li>
+        <div id="ClientPanel" class="hidden">
+            <div class="input-group">
+                <input class="form-control form-control-lg" type="text" placeholder="Enter QuikPic Code">
+                <button type="button" class="btn btn-primary btn-lg btn-block">Activate</button>
+            </div>
 
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md">
-                        <h5>Resources</h5>
-                        <ul class="list-unstyled text-small">
-                            <li>
-                                <a class="text-muted" href="#">Resource</a>
-                            </li>
+        </div>
 
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md">
-                        <h5>About</h5>
-                        <ul class="list-unstyled text-small">
-                            <li>
-                                <a class="text-muted" href="#">Team</a>
-                            </li>
+        <img id="img" style="width:100%" />
 
-                        </ul>
-                    </div>
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                    <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
                 </div>
-            </footer>
-        </div>
-    </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Cool stuff</a>
+                        </li>
 
-    </div>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Resource</a>
+                        </li>
 
-    <div id="ClientPanel" class="hidden">
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Team</a>
+                        </li>
 
-        <div class="input-group">
-            <input class="form-control form-control-lg" type="text" placeholder="Enter QuikPic Code">
-            <button type="button" class="btn btn-primary btn-lg btn-block">Activate</button>
-        </div>
+                    </ul>
+                </div>
+            </div>
+        </footer>
 
     </div>
 
@@ -141,59 +150,112 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 
-   <script>
+    <script>
 
-   $(function () {
-      var socket = io();
-      $('form').submit(function () {
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
-      socket.on('chat message', function (msg) {
-        var x = document.getElementById("myText").value;
-        if (msg === 'refresh' && x === 'key') {
-          location.reload();
+        var originalImage = document.getElementById("img");
+
+        function myFunction() {
+            var socket = io();
+            socket.emit('chat message', 'refresh');
         }
 
-        
-        if (msg === 'setsession') {
-          localStorage.setItem("session", "user");
-          $('#AdminPanel').removeClass("hidden");
-          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
-          //location.reload();
-        }
-        if (msg === 'clearsession') {
-          localStorage.setItem("session", "");
-          $('#ClientPanel').addClass("hidden");
-          document.getElementById("result").innerHTML = localStorage.getItem("session"); 
-          //location.reload();
-        }
-      });
-      socket.on('sendImage', function (msg) {
-        console.log('RESULT 222', msg);
-        document.getElementById('img').setAttribute('src', msg);
-      });
-    });
+        $(function () {
+            var socket = io();
+            socket.on('chat message', function (msg) {
+                if (msg === 'setsession') {
+                    localStorage.setItem("session", "user");
+                    $('#AdminPanel').removeClass("hidden");
+                    document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    //location.reload();
+                }
+                if (msg === 'clearsession') {
+                    localStorage.setItem("session", "");
+                    $('#ClientPanel').addClass("hidden");
+                    document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    //location.reload();
+                }
+            });
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT 222', msg);
+                document.getElementById('img').setAttribute('src', msg);
+            });
+        });
 
-     function SetLogin(param)
-    {
-      if (param === 1)
-      {
-        socketSendCommand("setsession");
-      }
-      else
-      {
-        socketSendCommand("clearsession");
-      }
-    }
+        function SetLogin(param) {
+            if (param === 1) {
+                socketSendCommand("setsession");
+            }
+            else {
+                socketSendCommand("clearsession");
+            }
+        }
 
-    function socketSendCommand(command)
-    {
-      var socket = io();
-      socket.emit('chat message', command);
-    }
-   </script>
+        function socketSendCommand(command) {
+            var socket = io();
+            socket.emit('chat message', command);
+        }
+
+        function encodeImageFileAsURL(element) {
+            var socket = io();
+            var file = element.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                socket.emit('sendImage', reader.result);
+                document.getElementById('img').setAttribute('src', reader.result);
+            }
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT', msg);
+                $('#img').setAttribute('src', msg);
+            });
+            reader.readAsDataURL(file);
+        }
+
+        function resetOrientation(srcBase64, srcOrientation, callback) {
+            var img = new Image();
+
+            img.onload = function () {
+                var width = img.width,
+                    height = img.height,
+                    canvas = document.createElement('canvas'),
+                    ctx = canvas.getContext("2d");
+
+                // set proper canvas dimensions before transform & export
+                if (4 < srcOrientation && srcOrientation < 9) {
+                    canvas.width = height;
+                    canvas.height = width;
+                } else {
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+
+                // transform context before drawing image
+                switch (srcOrientation) {
+                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+                    case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+                    case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+                    case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+                    default: break;
+                }
+
+                // draw image
+                ctx.drawImage(img, 0, 0);
+
+                // export base64
+                callback(canvas.toDataURL());
+            };
+
+            img.src = srcBase64;
+        }
+
+        function RotateImage(dir) {
+            resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
+        }
+
+
+    </script>
 
 </body>
 
