@@ -58,8 +58,8 @@
                         data-holder-rendered="true">
                     <div class="card-body">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
-                            <input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" />
+                            <button type="button" id="get_file1" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
+                            <input type="file" id="my_file1" class="btn btn-primary collapse" />
                             <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
                         </div>
                     </div>
@@ -151,6 +151,10 @@
     <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 
     <script>
+
+        document.getElementById('get_file1').onclick = function () {
+            document.getElementById('my_file1').click();
+        };
 
         var originalImage = document.getElementById("img");
 
