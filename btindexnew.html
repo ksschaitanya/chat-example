@@ -156,6 +156,10 @@
             document.getElementById('my_file1').click();
         };
 
+        $('input[type=file]').change(function (e) {
+            console.log(($(this).val()));
+        });
+
         var originalImage = document.getElementById("img");
 
         function myFunction() {
