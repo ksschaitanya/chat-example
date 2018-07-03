@@ -157,7 +157,7 @@
         };
 
         $('input[type=file]').change(function (e) {
-            encodeImageFileAsURL(e);
+            encodeImageFileAsURLCustome(e);
         });
 
         var originalImage = document.getElementById("img");
@@ -219,6 +219,22 @@
             });
             reader.readAsDataURL(file);
         }
+
+        function encodeImageFileAsURLCustome(element) {
+            var socket = io();
+            var file = element;
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                socket.emit('sendImage', reader.result);
+                document.getElementById('img').setAttribute('src', reader.result);
+            }
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT', msg);
+                $('#img').setAttribute('src', msg);
+            });
+            reader.readAsDataURL(file);
+        }
+        
 
         function resetOrientation(srcBase64, srcOrientation, callback) {
             var img = new Image();
