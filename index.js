@@ -24,6 +24,12 @@ io.on('connection', function(socket){
   });
 });
 
+io.on('connection', function(socket){
+  socket.on('newframecode', function(msg){
+    io.emit('newframecode', msg);
+  });
+});
+
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });

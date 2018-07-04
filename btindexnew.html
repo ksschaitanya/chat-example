@@ -175,20 +175,17 @@
                         $('#AdminPanel').addClass("hidden");
                         document.getElementById("result").innerHTML = localStorage.getItem("session");
                     }
-                    //location.reload();
                 }
-                // if (msg === 'clearsession') {
-                //     localStorage.setItem("session", "");
-                //     $('#ClientPanel').removeClass("hidden");
-                //     $('#AdminPanel').addClass("hidden");
-                //     document.getElementById("result").innerHTML = localStorage.getItem("session");
-                //     //location.reload();
-                // }
             });
             socket.on('sendImage', function (msg) {
                 console.log('RESULT 222', msg);
                 document.getElementById('img').setAttribute('src', msg);
                 document.getElementById('img1').setAttribute('src', msg);
+            });
+            socket.on('newframecode', function (msg) {
+                console.log('RESULT 222', msg);
+                document.getElementById('img').setAttribute('src', msg);
+                document.getElementById('img2').setAttribute('src', msg);
             });
         });
 
@@ -275,7 +272,7 @@
             $('#newFrameCodeMessage').html('enter code on QuikPic frame');
             $('#newFrameButton').addClass('hidden');
             // var socket = io();
-            // socket.emit('chat message', 'refresh');
+            // socket.emit('newframecode', 'refresh');
         }
 
         function setNewFrame() {
@@ -283,7 +280,13 @@
             console.log("API CALL TO Validate New Frame Code");
             if (c === 'ABC123XYZ') {
                 console.log("New Frame Code Added Successfully");
+                console.log("Getting API Key and using in Session");
+                $('#AdminPanel').addClass("hidden");
+                $('#ClientPanel').addClass("hidden");
                 $('#img').removeClass('hidden');
+                 
+                var socket = io();
+                socket.emit('newframecode', c); 
             }
         }
 
