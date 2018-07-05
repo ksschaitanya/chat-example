@@ -53,11 +53,13 @@
                     <div class="card-header">
                         <h4 class="my-0 font-weight-normal">New Frame</h4>
                     </div>
-                    <div id="framecontrol" class="card-body">
-                            <button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button>
-                            <h1 id="newFrameCode"></h1>
-                            <br>
-                            <h4 id="newFrameCodeMessage"></h4>
+                    <div class="card-body">
+                        <div id="framecontrol">
+                                <button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button>
+                                <h1 id="newFrameCode"></h1>
+                                <br>
+                                <h4 id="newFrameCodeMessage"></h4>
+                        </div> 
                     </div>
                 </div>
                 <!-- <div class="card mb-4 box-shadow">
@@ -151,7 +153,6 @@
             var socket = io();
             socket.on('chat message', function (msg) {
                 if (msg === 'checksession') {
-
                     if (localStorage.getItem("session") === "user") {
                         $('#AdminPanel').removeClass("hidden");
                         $('#ClientPanel').addClass("hidden");
@@ -170,11 +171,11 @@
                 document.getElementById('img1').setAttribute('src', msg);
             });
             socket.on('newframecode', function (msg) {
-                $("#framecontrol").empty();
-                $("#framecontrol").append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
+                var framecontrol = "#framecontrol"+msg;
+                $(framecontrol).empty();
+                $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
                 $("#imgpnl").append('<img id="'+msg+'" class="hidden" style="width:100%" />');
-                //document.getElementById(msg).setAttribute('src', msg);
-                $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div id="framecontrol" class="card-body"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><br><h1 id="newFrameCode"></h1><h4 id="newFrameCodeMessage"></h4></div></div>');
+                $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="framecontrol"'+msg+'"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
             });
         });
 
