@@ -152,6 +152,7 @@
             });
             socket.on('sendImage', function (msg) {
                 console.log('RESULT 222', msg);
+                $('#' + msg.imgid).removeClass("hidden");
                 document.getElementById(msg.imgid).setAttribute('src', msg.imgsrc);
                 //document.getElementById('img1').setAttribute('src', msg);
             });
@@ -161,23 +162,23 @@
                 var numItems = $('.card').length;
                 var framecontrol = "#framecontrol";
                 var newframecontrol = "framecontrol" + numItems;
-                var oldframecontrol = "#framecontrol" + (numItems-1);
+                var oldframecontrol = "#framecontrol" + (numItems - 1);
 
                 //$('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="framecontrol"' + (numItems+1) + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
 
                 if (numItems === 1) {
-                    $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="'+ newframecontrol +'"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
+                    $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(framecontrol).empty();
                     $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURLNEW(this,\'' + msg + '\')" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
                     $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
-                    
+
                 }
                 else {
                     $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(oldframecontrol).empty();
-                    $(oldframecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
+                    $(oldframecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURLNEW(this,\'' + msg + '\')" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
                     $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
-                    
+
                 }
             });
         });
@@ -215,17 +216,17 @@
             reader.readAsDataURL(file);
         }
 
-        function encodeImageFileAsURLNEW(element,imgID) {
+        function encodeImageFileAsURLNEW(element, imgID) {
             console.log('image ID as ', imgID);
             var socket = io();
             var file = element.files[0];
             var reader = new FileReader();
             reader.onloadend = function () {
-                socket.emit('sendImage',{'imgsrc': reader.result,'imgid':imgID});
+                socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': imgID });
             }
             socket.on('sendImage', function (msg) {
                 console.log('RESULT', msg);
-                $('#'+imgID).setAttribute('src', msg);
+                $('#' + imgID).setAttribute('src', msg);
             });
             reader.readAsDataURL(file);
         }
@@ -274,9 +275,20 @@
             resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
         }
 
+        function RandomeFrameCode() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < 5; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
         function newFrame() {
-            console.log("API CALL TO GET New Frame Code");
-            $('#newFrameCode').html('ABC123XYZ');
+            console.log("API CALL TO GET New Frame Code RandomeFrameCode");
+            var code = RandomeFrameCode();
+            $('#newFrameCode').html(code);
             $('#newFrameCodeMessage').html('enter code on QuikPic frame');
             $('#newFrameButton').addClass('hidden');
             //var socket = io();
