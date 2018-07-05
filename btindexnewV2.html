@@ -62,21 +62,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="card mb-4 box-shadow">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Frame 2</h4>
-                    </div>
-                    <img id="img1" class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=QuikPic"
-                        alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22348%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20348%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16450dd1175%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A17pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16450dd1175%22%3E%3Crect%20width%3D%22348%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22116.45000076293945%22%20y%3D%22120.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
-                        data-holder-rendered="true">
-                    <div class="card-body">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button>
-                            <input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" />
-                            <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
 
@@ -183,7 +168,7 @@
                 if (numItems === 1) {
                     $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="'+ newframecontrol +'"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(framecontrol).empty();
-                    $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
+                    $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURLNEW(this,ABC123XYZ)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
                     $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
                     
                 }
@@ -226,6 +211,23 @@
                 console.log('RESULT', msg);
                 $('#img').setAttribute('src', msg);
                 $('#img1').setAttribute('src', msg);
+            });
+            reader.readAsDataURL(file);
+        }
+
+        function encodeImageFileAsURLNEW(element,imgID) {
+            var socket = io();
+            var file = element.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                socket.emit('sendImage', reader.result);
+                document.getElementById(imgID).setAttribute('src', reader.result);
+                //document.getElementById('img1').setAttribute('src', msg);
+            }
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT', msg);
+                $('#'+imgID).setAttribute('src', msg);
+                //$('#img1').setAttribute('src', msg);
             });
             reader.readAsDataURL(file);
         }
