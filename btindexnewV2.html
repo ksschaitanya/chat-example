@@ -168,7 +168,7 @@
                 if (numItems === 1) {
                     $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="'+ newframecontrol +'"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(framecontrol).empty();
-                    $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURLNEW(this,ABC123XYZ)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURL(this)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
+                    $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURLNEW(this,ABC123XYZ)" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
                     $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
                     
                 }
@@ -216,6 +216,7 @@
         }
 
         function encodeImageFileAsURLNEW(element,imgID) {
+            console.log('image ID as ', imgID);
             var socket = io();
             var file = element.files[0];
             var reader = new FileReader();
