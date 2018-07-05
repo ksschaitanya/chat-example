@@ -160,6 +160,7 @@
 
                 // Get this through count
                 var numItems = $('.card').length;
+                var imageItems = $("#imgpnl > img").length
                 var framecontrol = "#framecontrol";
                 var newframecontrol = "framecontrol" + numItems;
                 var oldframecontrol = "#framecontrol" + (numItems - 1);
@@ -170,14 +171,20 @@
                     $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(framecontrol).empty();
                     $(framecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURLNEW(this,\'' + msg + '\')" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
-                    $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
+                    if (imageItems === 0)
+                    {
+                    $("#imgpnl").append('<img id="' + msg + '" class="hidden '+ msg +'" style="width:100%" />');
+                    }
 
                 }
                 else {
                     $('#parent').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
                     $(oldframecontrol).empty();
                     $(oldframecontrol).append('<div class="btn-group" role="group" aria-label="Basic example"><button type="button" onclick="encodeImageFileAsURL(this)" class="btn btn-primary">Change</button><input type="file" onchange="encodeImageFileAsURLNEW(this,\'' + msg + '\')" class="btn btn-primary" style="width: 27%;" /><button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button></div>');
-                    $("#imgpnl").append('<img id="' + msg + '" class="hidden" style="width:100%" />');
+                    if (imageItems === 0)
+                    {
+                    $("#imgpnl").append('<img id="' + msg + '" class="hidden '+ msg +'" style="width:100%" />');
+                    }
 
                 }
             });
