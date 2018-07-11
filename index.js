@@ -9,7 +9,7 @@ app.get('/', function(req, res){
   //res.sendFile(__dirname + '/index.html');
   //res.sendFile(__dirname + '/indexNewFeatures.html');
   //res.sendFile(__dirname + '/btindexnew.html');
-  res.sendFile(__dirname + '/btindexnewV2.html');
+  res.sendFile(__dirname + '/btindexnewV3.html');
 });
 
 io.on('connection', function(socket){
