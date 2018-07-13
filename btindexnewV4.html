@@ -191,8 +191,9 @@
                 dataType: 'json',
                 success: function (response) {
                     alert(response.token);
-                    localStorage.setItem("token", "response.token");
+                    localStorage.setItem("token", response.token);
                     $('#AdminPanel').removeClass("hidden");
+                    $('#ngdivscope').removeClass("hidden");
                     $('#ClientPanel').addClass("hidden");
                     document.getElementById("result").innerHTML = localStorage.getItem("session");
                 }
