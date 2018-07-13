@@ -243,12 +243,12 @@
 
         // Actual Login Function
         function Login() {
+
             $.ajax({
+                type: 'POST',
                 url: "https://reqres.in/api/login",
-                type: "POST",
-                data: {
-                    "email": "peter@klaven", "password": "cityslicka"
-                },
+                data: { "email": "peter@klaven", "password": "cityslicka" },
+                dataType: 'json',
                 success: function (response) {
                     alert(response.token);
                     localStorage.setItem("token", "response.token");
