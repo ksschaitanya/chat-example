@@ -316,7 +316,7 @@
 
                     var $scope = getScope('myCtrl');
 
-                    if (localStorage.getItem("frames") === "")
+                    if (localStorage.getItem("frames") === null)
                     {
                         localStorage.setItem("frames", JSON.stringify($scope.records));
                     }
