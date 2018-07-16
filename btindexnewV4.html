@@ -80,8 +80,8 @@
 
             <div id="ngdivscope" ng-app="myApp" ng-controller="myCtrl">
                     <!-- <button type="button" ng-click="hidePrefs()" class="btn btn-primary btn-lg btn-block">Set Scope</button> -->
-                    <div id="parent2" class="row" ng-repeat="x in records">
-                        <div class="col-md-4">
+                    <div id="parent2" class="row">
+                        <div class="col-md-4" ng-repeat="x in records">
                             <div class="card mb-4 box-shadow">
                                 <div class="card-header">
                                     <h4 class="my-0 font-weight-normal">{{x.Name}}</h4>
