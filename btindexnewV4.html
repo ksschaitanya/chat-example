@@ -86,13 +86,13 @@
                                 <div class="card-header">
                                     <h4 class="my-0 font-weight-normal">{{x.Name}}</h4>
                                 </div>
-                                <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" ng-src="{{x.imgData}}"
+                                <img id="{{x.Name}}" class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" ng-src="{{x.imgData}}"
                                     data-holder-rendered="true">
                                 <div class="card-body">
                                     <div id="framecontrol">
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" onclick="encodeImageFileAsURLNEW(this,{{x.Name}})" class="btn btn-primary">Change</button>
-                                            <input type="file" onchange="encodeImageFileAsURLNEW(this,{{x.Name}})" class="btn btn-primary" style="width: 27%;" />
+                                            <button type="button" onclick="encodeImageFileAsURLNEW(this)" class="btn btn-primary">Change</button>
+                                            <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;" />
                                             <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
                                         </div>
                                     </div>
@@ -409,17 +409,19 @@
             reader.readAsDataURL(file);
         }
 
-        function encodeImageFileAsURLNEW(element, imgID) {
-            console.log('image ID as ', imgID);
+        function encodeImageFileAsURLNEW(element) {
+            console.log('image ID as ', element.id);
             var socket = io();
             var file = element.files[0];
             var reader = new FileReader();
+            var frameID = element.id;
+            frameID = frameID.replace("imgID", "");
             reader.onloadend = function () {
-                socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': imgID });
+                socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
             }
             socket.on('sendImage', function (msg) {
                 console.log('RESULT', msg);
-                $('#' + imgID).setAttribute('src', msg);
+                $('#' + frameID).setAttribute('src', msg.imgsrc);
             });
             reader.readAsDataURL(file);
         }
