@@ -377,7 +377,7 @@
                 imgData: reader.result
             });
             reader.onloadend = function () {
-                localStorage.setItem("frames", JSON.stringify(framesArry));
+                //localStorage.setItem("frames", JSON.stringify(framesArry));
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
             }
             // socket.on('sendImage', function (msg) {
