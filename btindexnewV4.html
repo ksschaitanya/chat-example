@@ -362,23 +362,6 @@
             socket.emit('chat message', command);
         }
 
-        function encodeImageFileAsURL(element) {
-            var socket = io();
-            var file = element.files[0];
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                socket.emit('sendImage', reader.result);
-                document.getElementById('img').setAttribute('src', reader.result);
-                document.getElementById('img1').setAttribute('src', msg);
-            }
-            socket.on('sendImage', function (msg) {
-                console.log('RESULT', msg);
-                $('#img').setAttribute('src', msg);
-                $('#img1').setAttribute('src', msg);
-            });
-            reader.readAsDataURL(file);
-        }
-
         function encodeImageFileAsURLNEW(element) {
             console.log('image ID as ', element.id);
             var socket = io();
@@ -389,10 +372,10 @@
             reader.onloadend = function () {
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
             }
-            socket.on('sendImage', function (msg) {
-                console.log('RESULT', msg);
-                $('#' + frameID).setAttribute('src', msg.imgsrc);
-            });
+            // socket.on('sendImage', function (msg) {
+            //     console.log('RESULT', msg);
+            //     $('#' + frameID).setAttribute('src', msg.imgsrc);
+            // });
             reader.readAsDataURL(file);
         }
 
