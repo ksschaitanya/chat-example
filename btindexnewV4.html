@@ -369,7 +369,15 @@
             var reader = new FileReader();
             var frameID = element.id;
             frameID = frameID.replace("imgID", "");
+
+            var retrievedData = localStorage.getItem("frames");
+            var framesArry = JSON.parse(retrievedData);
+            framesArry.push({
+                Name: frameID,
+                imgData: reader.result
+            });
             reader.onloadend = function () {
+                localStorage.setItem("frames", JSON.stringify(framesArry));
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
             }
             // socket.on('sendImage', function (msg) {
