@@ -313,7 +313,7 @@
                     $('#parent').empty();
                     $('#parent').addClass("hidden");
                     $('#ngdivscope').removeClass("hidden");
-                    $('#parent2 > #newframediv').empty();
+                    $('#parent2 > #newframediv').remove();
 
                     var $scope = getScope('myCtrl');
 
@@ -352,8 +352,8 @@
                     //     ];
                     $scope.$apply();
 
-                    // $('#parent2 > #newframediv').append('<div id="newframediv" class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
-                    $('#parent2 > #newframediv').append('<div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div>');
+                    $('#parent2').append('<div id="newframediv" class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
+                    
                 }
 
             //    if (numItems === 1) {
