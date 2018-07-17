@@ -33,7 +33,7 @@
             margin: auto;
         }
 
-        .js .input-file-trigger {
+        .input-file-trigger {
             display: block;
             padding: 14px 45px;
             background: #39D2B4;
@@ -43,7 +43,7 @@
             cursor: pointer;
         }
 
-        .js .input-file {
+        .input-file {
             position: absolute;
             top: 0;
             left: 0;
@@ -53,32 +53,12 @@
             cursor: pointer;
         }
 
-        .js .input-file:hover+.input-file-trigger,
-        .js .input-file:focus+.input-file-trigger,
-        .js .input-file-trigger:hover,
-        .js .input-file-trigger:focus {
+        .input-file:hover+.input-file-trigger,
+        .input-file:focus+.input-file-trigger,
+        .input-file-trigger:hover,
+        .input-file-trigger:focus {
             background: #34495E;
             color: #39D2B4;
-        }
-
-        .file-return {
-            margin: 0;
-        }
-
-        .file-return:not(:empty) {
-            margin: 1em 0;
-        }
-
-        .js .file-return {
-            font-style: italic;
-            font-size: .9em;
-            font-weight: bold;
-        }
-
-        .js .file-return:not(:empty):before {
-            content: "Selected file: ";
-            font-style: normal;
-            font-weight: normal;
         }
     </style>
 
@@ -139,10 +119,10 @@
                             <div class="card-body">
                                 <div id="framecontrol">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" onclick="encodeImageFileAsURLNEW(this)" class="btn btn-primary">Change</button>
                                         <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
-                                        <input class="input-file" id="{{'imgID'+ x.Name}}" type="file">
+                                        <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)">
                                         <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label>
+                                        <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-primary">Rotate</button>
                                         <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
                                     </div>
                                 </div>
@@ -210,27 +190,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
     <script>
-
-        document.querySelector("html").classList.add('js');
-
-        var fileInput = document.querySelector(".input-file"),
-            button = document.querySelector(".input-file-trigger"),
-            the_return = document.querySelector(".file-return");
-
-        button.addEventListener("keydown", function (event) {
-            if (event.keyCode == 13 || event.keyCode == 32) {
-                fileInput.focus();
-            }
-        });
-        button.addEventListener("click", function (event) {
-            fileInput.focus();
-            return false;
-        });
-        fileInput.addEventListener("change", function (event) {
-            //the_return.innerHTML = this.value;
-            encodeImageFileAsURLNEW(this);
-        });
-
 
         var app = angular.module("myApp", []);
         app.controller("myCtrl", function ($scope) {
@@ -475,8 +434,15 @@
             img.src = srcBase64;
         }
 
-        function RotateImage(dir) {
-            resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
+        function RotateImage(element) {
+            var dir = 2;
+            var frameID = element.id;
+            frameID = frameID.replace("btnID", "");
+            var originalImagethis = document.getElementById("imgID"+frameID);
+            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) { 
+                originalImagethis.src = resetBase64Image; 
+                socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
+            });
         }
 
 
