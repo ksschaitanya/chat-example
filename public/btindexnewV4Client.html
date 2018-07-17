@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>QuikPic</title>
+    <style>
+        .hidden {
+            visibility: collapse;
+        }
+
+        #imgpnl {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .imgclass {
+            min-height: 100%;
+            min-width: 100%;
+            height: auto;
+            width: auto;
+            position: absolute;
+            top: -100%;
+            bottom: -100%;
+            left: -100%;
+            right: -100%;
+            margin: auto;
+        }
+    </style>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="http://getbootstrap.com/docs/4.1/examples/album/album.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+    <div id="divNav" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+        <h5 class="my-0 mr-md-auto font-weight-normal">QuikPic</h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" id="result" href="#">u</a>
+        </nav>
+        <button type="button" class="btn btn-outline-primary" onclick="Login()">Login</button>
+        <button type="button" class="btn btn-outline-primary" onclick="Logout()">Logout</button>
+        <button type="button" class="btn btn-outline-primary" onclick="Client">Client</button>
+    </div>
+
+    <div class="container">
+
+        <div id="AdminPanel" class="hidden">
+            <div id="parent" class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">New Frame</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="framecontrol">
+                                <button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button>
+                                <h1 id="newFrameCode"></h1>
+                                <br>
+                                <h4 id="newFrameCodeMessage"></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ngdivscope" ng-app="myApp" ng-controller="myCtrl">
+                    <!-- <button type="button" ng-click="hidePrefs()" class="btn btn-primary btn-lg btn-block">Set Scope</button> -->
+                    <div id="parent2" class="row">
+                        <div class="col-md-4" ng-repeat="x in records">
+                            <div class="card mb-4 box-shadow">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">{{x.Name}}</h4>
+                                </div>
+                                <img id="{{x.Name}}" class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" ng-src="{{x.imgData}}"
+                                    data-holder-rendered="true">
+                                <div class="card-body">
+                                    <div id="framecontrol">
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" onclick="encodeImageFileAsURLNEW(this)" class="btn btn-primary">Change</button>
+                                            <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;" />
+                                            <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+        <div id="ClientPanel" class="hidden">
+            <div class="input-group">
+                <input id="newQuikPiccode" class="form-control form-control-lg" type="text" placeholder="Enter QuikPic Code">
+                <button type="button" onclick="setNewFrame()" class="btn btn-primary btn-lg btn-block">Activate</button>
+            </div>
+
+        </div>
+
+        <div id="imgpnl">
+            <!-- <img id="img" class="hidden" style="width:100%" /> -->
+        </div>
+
+        <footer id="divFooter" class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                    <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Cool stuff</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Resource</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li>
+                            <a class="text-muted" href="#">Team</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script> -->
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script>
+
+        var app = angular.module("myApp", []);
+        app.controller("myCtrl", function ($scope) {
+            $scope.hidePrefs = function () {
+                $scope.records = [
+                    // {
+                    //     "Name": "New Frame",
+                    //     "imgData": "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22348%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20348%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16450dd1175%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A17pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16450dd1175%22%3E%3Crect%20width%3D%22348%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22116.45000076293945%22%20y%3D%22120.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                    // }
+                ]
+            }
+            $scope.hidePrefs();
+        });
+
+        // Actual Login Function
+        function Login() {
+            $.ajax({
+                type: 'POST',
+                url: "https://reqres.in/api/login",
+                data: { "email": "peter@klaven", "password": "cityslicka" },
+                dataType: 'json',
+                success: function (response) {
+                    alert(response.token);
+                    localStorage.setItem("token", response.token);
+                    $('#AdminPanel').removeClass("hidden");
+                    $('#ngdivscope').removeClass("hidden");
+                    $('#ClientPanel').addClass("hidden");
+                    document.getElementById("result").innerHTML = localStorage.getItem("session");
+                }
+            });
+        }
+
+        // Actual Logout Function
+        function Logout() {
+            localStorage.setItem("token", "");
+            $('#ClientPanel').removeClass("hidden");
+            $('#AdminPanel').addClass("hidden");
+            document.getElementById("result").innerHTML = localStorage.getItem("session");
+        }
+
+        // Actual client Display
+        function Client() {
+            localStorage.setItem("session", "");
+            localStorage.setItem("token", "");
+            $('#ClientPanel').removeClass("hidden");
+            $('#AdminPanel').empty();
+            //socketSendCommand("checksession");
+        }
+
+        // Helper for Ng Scope element
+        function getScope(ctrlName) {
+            var sel = 'div[ng-controller="' + ctrlName + '"]';
+            return angular.element(sel).scope();
+        }
+
+        // Helper for Code Generator
+        function RandomeFrameCode() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < 5; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
+        // Button Click on the Add New Frame
+        function newFrame() {
+            console.log("API CALL TO GET New Frame Code RandomeFrameCode");
+            var code = RandomeFrameCode();
+            $('#newFrameCode').html(code);
+            $('#newFrameCodeMessage').html('enter code on QuikPic frame');
+            $('#newFrameButton').addClass('hidden');
+            //var socket = io();
+            //socket.emit('newframecode', 'refresh');
+        }
+
+        // Client Activated Code from anywhere
+        function setNewFrame() {
+            var c = $('#newQuikPiccode').val();
+            console.log("API CALL TO Validate New Frame Code");
+            //if (c === 'ABC123XYZ') 
+            if (true) {
+                console.log("New Frame Code Added Successfully");
+                if (localStorage.getItem("clienttoken") === "") {
+                    $('#AdminPanel').addClass("hidden");
+                    $('#ClientPanel').addClass("hidden");
+                    alert("Frame Activated !!")
+                }
+                // Sending the confirmation to admin
+                var socket = io();
+                socket.emit('newframecode', c);
+            }
+        }
+
+        // Socket IO calls
+        $(function () {
+            var socket = io();
+
+            socket.on('chat message', function (msg) {
+                if (msg === 'checksession') {
+                    if (localStorage.getItem("session") === "user") {
+                        $('#AdminPanel').removeClass("hidden");
+                        $('#ClientPanel').addClass("hidden");
+                        document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    }
+                    else {
+                        $('#ClientPanel').removeClass("hidden");
+                        $('#AdminPanel').addClass("hidden");
+                        document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    }
+                }
+            });
+
+
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT 222', msg);
+                $('#' + msg.imgid).removeClass("hidden");
+                document.getElementById(msg.imgid).setAttribute('src', msg.imgsrc);
+                //document.getElementById('img1').setAttribute('src', msg);
+            });
+
+
+            socket.on('newframecode', function (msg) {
+
+                // Get this through count
+                var numItems = $('.card').length;
+                var imageItems = $("#imgpnl > img").length
+                var framecontrol = "#framecontrol";
+                var newframecontrol = "framecontrol" + numItems;
+                var oldframecontrol = "#framecontrol" + (numItems - 1);
+
+                // On client side clear page and add image placeholder
+                if (localStorage.getItem("token") === "") {
+                    if (imageItems === 0) {
+                        $('#divNav').addClass("hidden");
+                        $('#divFooter').addClass("hidden");
+                        $("#imgpnl").append('<p id="clientmsg">Frame Activated</p><img id="' + msg + '" class="imgclass hidden ' + msg + '" style="width:100%" />');
+                    }
+                }
+                // On Admin side clear page and add image placeholder
+                else {
+                    //$('#parent').append('<div class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
+                    $('#parent').empty();
+                    $('#parent').addClass("hidden");
+                    $('#ngdivscope').removeClass("hidden");
+                    $('#parent2 > #newframediv').remove();
+
+                    var $scope = getScope('myCtrl');
+
+                    if (localStorage.getItem("frames") === null)
+                    {
+                    $scope.records = [
+                             {
+                                 "Name": msg,
+                                 "imgData": "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22348%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20348%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16450dd1175%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A17pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16450dd1175%22%3E%3Crect%20width%3D%22348%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22116.45000076293945%22%20y%3D%22120.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                             }
+                         ];
+                        localStorage.setItem("frames", JSON.stringify($scope.records));
+                    }
+                    else
+                    {
+                        //$('#parent2').empty();
+                        var retrievedData = localStorage.getItem("frames");
+                        var framesArry = JSON.parse(retrievedData);
+                        framesArry.push({
+                            Name:  msg,
+                            imgData: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22348%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20348%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16450dd1175%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A17pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16450dd1175%22%3E%3Crect%20width%3D%22348%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22116.45000076293945%22%20y%3D%22120.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                        });
+                        localStorage.setItem("frames", JSON.stringify(framesArry));
+                        $scope.records = framesArry;
+                    }
+                    
+                    $scope.$apply();
+
+                    $('#parent2').append('<div id="newframediv" class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
+                    
+                }
+            });
+
+
+        });
+
+        var originalImage = document.getElementById("img");
+
+        function myFunction() {
+            var socket = io();
+            socket.emit('chat message', 'refresh');
+        }
+
+        function socketSendCommand(command) {
+            var socket = io();
+            socket.emit('chat message', command);
+        }
+
+        function encodeImageFileAsURLNEW(element) {
+            console.log('image ID as ', element.id);
+            var socket = io();
+            var file = element.files[0];
+            var reader = new FileReader();
+            var frameID = element.id;
+            frameID = frameID.replace("imgID", "");
+
+            var retrievedData = localStorage.getItem("frames");
+            var framesArry = JSON.parse(retrievedData);
+            framesArry.push({
+                Name: frameID,
+                imgData: reader.result
+            });
+            reader.onloadend = function () {
+                //localStorage.setItem("frames", JSON.stringify(framesArry));
+                socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
+            }
+            // socket.on('sendImage', function (msg) {
+            //     console.log('RESULT', msg);
+            //     $('#' + frameID).setAttribute('src', msg.imgsrc);
+            // });
+            reader.readAsDataURL(file);
+        }
+
+        function resetOrientation(srcBase64, srcOrientation, callback) {
+            var img = new Image();
+
+            img.onload = function () {
+                var width = img.width,
+                    height = img.height,
+                    canvas = document.createElement('canvas'),
+                    ctx = canvas.getContext("2d");
+
+                // set proper canvas dimensions before transform & export
+                if (4 < srcOrientation && srcOrientation < 9) {
+                    canvas.width = height;
+                    canvas.height = width;
+                } else {
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+
+                // transform context before drawing image
+                switch (srcOrientation) {
+                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+                    case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+                    case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+                    case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+                    default: break;
+                }
+
+                // draw image
+                ctx.drawImage(img, 0, 0);
+
+                // export base64
+                callback(canvas.toDataURL());
+            };
+
+            img.src = srcBase64;
+        }
+
+        function RotateImage(dir) {
+            resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
+        }
+
+
+
+    </script>
+</body>
+
+</html>
