@@ -32,6 +32,7 @@ io.on('connection', function(socket){
 io.on('connection', function(socket){
   socket.on('sendImage', function(msg){
     io.emit('sendImage', msg);
+    console.log("this is from index.js file" + msg);
   });
 });
 
