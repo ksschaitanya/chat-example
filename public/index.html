@@ -60,6 +60,12 @@
             background: #34495E;
             color: #39D2B4;
         }
+
+        .btn-mint {
+            color: #fff;
+            background-color: #39D2B4;
+            border-color: #007bff;
+        }
     </style>
 
     <!-- Bootstrap core CSS -->
@@ -122,8 +128,8 @@
                                         <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
                                         <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)">
                                         <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label>
-                                        <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-primary">Rotate</button>
-                                        <button type="button" onclick="myFunction()" class="btn btn-primary">Reset</button>
+                                        <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
+                                        <button type="button" onclick="myFunction()" class="btn btn-mint">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -438,9 +444,9 @@
             var dir = 2;
             var frameID = element.id;
             frameID = frameID.replace("btnID", "");
-            var originalImagethis = document.getElementById("imgID"+frameID);
-            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) { 
-                originalImagethis.src = resetBase64Image; 
+            var originalImagethis = document.getElementById(frameID);
+            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) {
+                originalImagethis.src = resetBase64Image;
                 socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
             });
         }
