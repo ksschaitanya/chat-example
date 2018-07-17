@@ -84,7 +84,7 @@
             if (true) {
                 console.log("New Frame Code Added Successfully");
                 $('#ClientPanel').addClass("hidden");
-                alert("Frame Activated !!")
+                //alert("Frame Activated !!")
                 // Sending the confirmation to admin
                 var socket = io();
                 socket.emit('newframecode', c);
@@ -115,6 +115,7 @@
                 console.log('RESULT 222', msg);
                 $('#' + msg.imgid).removeClass("hidden");
                 $('#ClientPanel').addClass("hidden");
+                $('#clientmsg').remove();
                 document.getElementById(msg.imgid).setAttribute('src', msg.imgsrc);
                 //document.getElementById('img1').setAttribute('src', msg);
             });
