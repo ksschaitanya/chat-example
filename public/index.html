@@ -487,17 +487,18 @@
         }
 
         function RotateImage(element) {
+            var socket = io();
             var dir = 2;
             var frameID = element.id;
             frameID = frameID.replace("btnID", "");
             var originalImagethis = document.getElementById(frameID);
-            // resetOrientation(originalImagethis.src, dir, function (resetBase64Image) {
-            //     socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
-            //     originalImagethis.src = resetBase64Image;
-            // });
-            var srcBase64 = resetOrientationNew(originalImagethis.src, dir);
-            originalImagethis.src = srcBase64
-            socket.emit('sendImage', { 'imgsrc': srcBase64, 'imgid': frameID });
+            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) {
+                socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
+                originalImagethis.src = resetBase64Image;
+            });
+            // var srcBase64 = resetOrientationNew(originalImagethis.src, dir);
+            // originalImagethis.src = srcBase64
+            // socket.emit('sendImage', { 'imgsrc': srcBase64, 'imgid': frameID });
         }
 
 
