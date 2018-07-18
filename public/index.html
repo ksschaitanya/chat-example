@@ -447,11 +447,12 @@
 
         function RotateImage(element) {
             var socket = io();
-            var dir = 2;
+            var direction = 2;
             var frameID = element.id;
             frameID = frameID.replace("btnID", "");
             var originalImagethis = document.getElementById(frameID);
             var lsframeID = localStorage.getItem("frameid");
+            var dir = localStorage.getItem("dir");
 
             if (lsframeID === null) {
                 localStorage.setItem("frameid", frameID);
@@ -459,12 +460,11 @@
             }
             else {
                 if (lsframeID === frameID) {
-                    var dir = localStorage.getItem("dir");
                     if (dir === 8) {
-                        dir = 2;
+                        dir = direction;
                     }
                     else {
-                        dir = dir + 1;
+                        dir = (dir + 1);
                     }
                     localStorage.setItem("dir", dir);
                 }
@@ -473,7 +473,7 @@
                     localStorage.setItem("dir", 2);
                 }
             }
-            resetOrientation(originalImagethis.src, localStorage.getItem("dir"), function (resetBase64Image) {
+            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) {
                 socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
                 originalImagethis.src = resetBase64Image;
             });
