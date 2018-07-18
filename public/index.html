@@ -88,7 +88,7 @@
         </nav>
         <button type="button" class="btn btn-outline-primary" onclick="Login()">Login</button>
         <button type="button" class="btn btn-outline-primary" onclick="Logout()">Logout</button>
-        <button type="button" class="btn btn-outline-primary" onclick="Client">Client</button>
+        <button type="button" class="btn btn-outline-primary" onclick="Client()">Client</button>
     </div>
 
     <div class="container">
@@ -231,6 +231,7 @@
         // Actual Logout Function
         function Logout() {
             localStorage.setItem("token", "");
+            localStorage.setItem("frames", "");
             //$('#ClientPanel').removeClass("hidden");
             $('#AdminPanel').addClass("hidden");
             document.getElementById("result").innerHTML = localStorage.getItem("session");
@@ -444,61 +445,38 @@
             img.src = srcBase64;
         }
 
-        function resetOrientationNew(srcBase64, srcOrientation) {
-            var img = new Image();
-            var width = img.width,
-                    height = img.height,
-                    canvas = document.createElement('canvas'),
-                    ctx = canvas.getContext("2d");
-
-            img.onload = function () {
-                
-
-                // set proper canvas dimensions before transform & export
-                if (4 < srcOrientation && srcOrientation < 9) {
-                    canvas.width = height;
-                    canvas.height = width;
-                } else {
-                    canvas.width = width;
-                    canvas.height = height;
-                }
-
-                // transform context before drawing image
-                switch (srcOrientation) {
-                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
-                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
-                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
-                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-                    case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
-                    case 7: ctx.transform(0, -1, -1, 0, height, width); break;
-                    case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
-                    default: break;
-                }
-
-                // draw image
-                ctx.drawImage(img, 0, 0);
-
-                // export base64
-                //callback(canvas.toDataURL());
-            };
-
-            img.src = srcBase64;
-            return canvas.toDataURL();
-        }
-
         function RotateImage(element) {
             var socket = io();
             var dir = 2;
             var frameID = element.id;
             frameID = frameID.replace("btnID", "");
             var originalImagethis = document.getElementById(frameID);
-            resetOrientation(originalImagethis.src, dir, function (resetBase64Image) {
+            var lsframeID = localStorage.getItem("frameID");
+
+            if (lsframeID === null) {
+                localStorage.setItem("frameid", frameID);
+                localStorage.setItem("dir", dir);
+            }
+            else {
+                if (lsframeID === frameID) {
+                    var dir = localStorage.getItem("dir");
+                    if (dir === 8) {
+                        dir = 2;
+                    }
+                    else {
+                        dir = dir + 1;
+                    }
+                    localStorage.setItem("dir", dir);
+                }
+                else {
+                    localStorage.setItem("frameid", frameID);
+                    localStorage.setItem("dir", 2);
+                }
+            }
+            resetOrientation(originalImagethis.src, localStorage.getItem("dir"), function (resetBase64Image) {
                 socket.emit('sendImage', { 'imgsrc': resetBase64Image, 'imgid': frameID });
                 originalImagethis.src = resetBase64Image;
             });
-            // var srcBase64 = resetOrientationNew(originalImagethis.src, dir);
-            // originalImagethis.src = srcBase64
-            // socket.emit('sendImage', { 'imgsrc': srcBase64, 'imgid': frameID });
         }
 
 
