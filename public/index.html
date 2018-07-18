@@ -231,7 +231,7 @@
         // Actual Logout Function
         function Logout() {
             localStorage.setItem("token", "");
-            localStorage.setItem("frames", "");
+            localStorage.removeItem("frames");
             //$('#ClientPanel').removeClass("hidden");
             $('#AdminPanel').addClass("hidden");
             document.getElementById("result").innerHTML = localStorage.getItem("session");
