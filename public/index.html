@@ -453,6 +453,7 @@
             var originalImagethis = document.getElementById(frameID);
             var lsframeID = localStorage.getItem("frameid");
             var dir = localStorage.getItem("dir");
+            var increment = 1;
 
             if (lsframeID === null) {
                 localStorage.setItem("frameid", frameID);
@@ -464,7 +465,7 @@
                         dir = direction;
                     }
                     else {
-                        dir = (dir + 1);
+                        dir = (dir + increment);
                     }
                     localStorage.setItem("dir", dir);
                 }
