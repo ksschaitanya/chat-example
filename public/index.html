@@ -465,7 +465,7 @@
                         dir = direction;
                     }
                     else {
-                        dir = (dir + increment);
+                        dir = parseInt(dir) + 1;
                     }
                     localStorage.setItem("dir", dir);
                 }
