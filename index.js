@@ -42,6 +42,12 @@ io.on('connection', function(socket){
   });
 });
 
+io.on('connection', function(socket){
+  socket.on('rotateImage', function(msg){
+    io.emit('rotateImage', msg);
+  });
+});
+
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
