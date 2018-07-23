@@ -445,7 +445,7 @@
             img.src = srcBase64;
         }
 
-        function RotateImage(element) {
+        function RotateImageOriginal(element) {
             var socket = io();
             var direction = 2;
             var frameID = element.id;
@@ -480,7 +480,37 @@
             });
         }
 
+        function RotateImage(element){
+            var socket = io();
+            var direction = 2;
+            var frameID = element.id;
+            frameID = frameID.replace("btnID", "");
+            var originalImagethis = document.getElementById(frameID);
+            var lsframeID = localStorage.getItem("frameid");
+            var dir = localStorage.getItem("dir");
+            var increment = 1;
 
+            if (lsframeID === null) {
+                localStorage.setItem("frameid", frameID);
+                localStorage.setItem("dir", dir);
+            }
+            else {
+                if (lsframeID === frameID) {
+                    if (dir == 8) {
+                        dir = direction;
+                    }
+                    else {
+                        dir = parseInt(dir) + 1;
+                    }
+                    localStorage.setItem("dir", dir);
+                }
+                else {
+                    localStorage.setItem("frameid", frameID);
+                    localStorage.setItem("dir", 2);
+                }
+            }
+            socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+        }
 
     </script>
 </body>

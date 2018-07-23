@@ -129,6 +129,11 @@
                 }
             });
 
+            socket.on('rotateImage', function (msg) {
+                var originalImageNew = document.getElementById(msg.imgid);
+                resetOrientation(originalImageNew.src, msg.direction, function (resetBase64Image) { originalImageNew.src = resetBase64Image; });
+            });
+
 
         });
 
