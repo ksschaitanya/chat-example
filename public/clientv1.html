@@ -1,0 +1,203 @@
+Nhidden { visibility: collapse; } #imgpnl { margin: 0; height: 100%; overflow: hidden; } .imgclass { min-height: 100%; min-width:
+100%; height: auto; width: auto; position: absolute; top: -100%; bottom: -100%; left: -100%; right: -100%; margin: auto;
+}
+</style>
+
+<!-- Bootstrap core CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="http://getbootstrap.com/docs/4.1/examples/album/album.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+    <div class="container">
+
+        <div id="ClientPanel">
+            <div class="input-group">
+                <input id="newQuikPiccode" class="form-control form-control-lg" type="text" placeholder="Enter QuikPic Code">
+                <button type="button" onclick="setNewFrame()" class="btn btn-primary btn-lg btn-block">Activate</button>
+            </div>
+
+        </div>
+
+        <div id="imgpnl">
+            <!-- <img id="img" class="hidden" style="width:100%" /> -->
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script> -->
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="http://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="/load-image.all.min.js"></script>
+
+    <script>
+
+        // Client Activated Code from anywhere
+        function setNewFrame() {
+            var c = $('#newQuikPiccode').val();
+            console.log("API CALL TO Validate New Frame Code");
+            //if (c === 'ABC123XYZ') 
+            if (true) {
+                console.log("New Frame Code Added Successfully");
+                $('#ClientPanel').addClass("hidden");
+                //alert("Frame Activated !!")
+                // Sending the confirmation to admin
+                var socket = io();
+                socket.emit('newframecode', c);
+            }
+        }
+
+        // Socket IO calls
+        $(function () {
+            var socket = io();
+
+            socket.on('chat message', function (msg) {
+                if (msg === 'checksession') {
+                    if (localStorage.getItem("session") === "user") {
+                        //$('#AdminPanel').removeClass("hidden");
+                        $('#ClientPanel').addClass("hidden");
+                        document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    }
+                    else {
+                        $('#ClientPanel').removeClass("hidden");
+                        //$('#AdminPanel').addClass("hidden");
+                        document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    }
+                }
+            });
+
+
+            socket.on('sendImage', function (msg) {
+                console.log('RESULT 222', msg);
+                $('#' + msg.imgid).removeClass("hidden");
+                $('#ClientPanel').addClass("hidden");
+                $('#clientmsg').remove();
+                document.getElementById(msg.imgid).setAttribute('src', msg.imgsrc);
+                //document.getElementById('img1').setAttribute('src', msg);
+            });
+
+
+            socket.on('newframecode', function (msg) {
+                // Get this through count
+                var imageItems = $("#imgpnl > img").length
+                if (imageItems === 0) {
+                    $("#imgpnl").append('<p id="clientmsg">Frame Activated</p><img id="' + msg + '" class="imgclass hidden ' + msg + '" style="width:100%" />');
+                }
+            });
+
+            socket.on('rotateImage', function (msg) {
+                var originalImageNew = document.getElementById(msg.imgid);
+                var scaledImage = loadImage.scale(
+                    originalImageNew, // img or canvas element
+                    { maxWidth: 600 }
+                );
+                console.log(scaledImage);
+                //resetOrientation(originalImageNew.src, msg.direction, function (resetBase64Image) { originalImageNew.src = resetBase64Image; });
+            });
+
+
+        });
+
+        var originalImage = document.getElementById("img");
+
+        function myFunction() {
+            var socket = io();
+            socket.emit('chat message', 'refresh');
+        }
+
+        function socketSendCommand(command) {
+            var socket = io();
+            socket.emit('chat message', command);
+        }
+
+        function encodeImageFileAsURLNEW(element) {
+            console.log('image ID as ', element.id);
+            var socket = io();
+            var file = element.files[0];
+            var reader = new FileReader();
+            var frameID = element.id;
+            frameID = frameID.replace("imgID", "");
+
+            var retrievedData = localStorage.getItem("frames");
+            var framesArry = JSON.parse(retrievedData);
+            framesArry.push({
+                Name: frameID,
+                imgData: reader.result
+            });
+            reader.onloadend = function () {
+                //localStorage.setItem("frames", JSON.stringify(framesArry));
+                socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
+            }
+            // socket.on('sendImage', function (msg) {
+            //     console.log('RESULT', msg);
+            //     $('#' + frameID).setAttribute('src', msg.imgsrc);
+            // });
+            reader.readAsDataURL(file);
+        }
+
+        function resetOrientation(srcBase64, srcOrientation, callback) {
+            var img = new Image();
+
+            img.onload = function () {
+                var width = img.width,
+                    height = img.height,
+                    canvas = document.createElement('canvas'),
+                    ctx = canvas.getContext("2d");
+
+                // set proper canvas dimensions before transform & export
+                if (4 < srcOrientation && srcOrientation < 9) {
+                    canvas.width = height;
+                    canvas.height = width;
+                } else {
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+
+                // transform context before drawing image
+                switch (srcOrientation) {
+                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+                    case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+                    case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+                    case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+                    default: break;
+                }
+
+                // draw image
+                ctx.drawImage(img, 0, 0);
+
+                // export base64
+                callback(canvas.toDataURL());
+            };
+
+            img.src = srcBase64;
+        }
+
+        function RotateImage(dir) {
+            resetOrientation(originalImage.src, dir, function (resetBase64Image) { originalImage.src = resetBase64Image; });
+        }
+
+       
+
+
+
+    </script>
+</body>
+
+</html>
