@@ -87,6 +87,14 @@ Nhidden { visibility: collapse; } #imgpnl { margin: 0; height: 100%; overflow: h
                 $('#ClientPanel').addClass("hidden");
                 $('#clientmsg').remove();
                 document.getElementById(msg.imgid).setAttribute('src', msg.imgsrc);
+                var originalImageNew = document.getElementById(msg.imgid);
+                var scaledImage = loadImage.scale(
+                    originalImageNew, // img or canvas element
+                    {maxWidth: 600,
+	                orientation: true}
+                );
+                console.log(scaledImage);
+                originalImageNew.src = scaledImage.src;
                 //document.getElementById('img1').setAttribute('src', msg);
             });
 
@@ -103,9 +111,11 @@ Nhidden { visibility: collapse; } #imgpnl { margin: 0; height: 100%; overflow: h
                 var originalImageNew = document.getElementById(msg.imgid);
                 var scaledImage = loadImage.scale(
                     originalImageNew, // img or canvas element
-                    { maxWidth: 600 }
+                    {maxWidth: 600,
+	                orientation: msg.direction}
                 );
                 console.log(scaledImage);
+                originalImageNew.src = scaledImage.src;
                 //resetOrientation(originalImageNew.src, msg.direction, function (resetBase64Image) { originalImageNew.src = resetBase64Image; });
             });
 
