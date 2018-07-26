@@ -388,6 +388,14 @@
             var frameID = element.id;
             frameID = frameID.replace("imgID", "");
 
+            EXIF.getData(file, function() {
+                    var exifData = EXIF.pretty(this);
+                    if (exifData) {
+                        console.log(exifData);
+                        alert(exifData);
+                    } 
+                });
+
             var retrievedData = localStorage.getItem("frames");
             var framesArry = JSON.parse(retrievedData);
             framesArry.push({
