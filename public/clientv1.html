@@ -110,7 +110,7 @@ Nhidden { visibility: collapse; } #imgpnl { margin: 0; height: 100%; overflow: h
             socket.on('rotateImage', function (msg) {
                 var originalImageNew = document.getElementById(msg.imgid);
                 var scaledImage = loadImage.scale(
-                    originalImageNew, // img or canvas element
+                    originalImageNew, // img or canvas element new implementation
                     {maxWidth: 600,
 	                orientation: msg.direction}
                 );
