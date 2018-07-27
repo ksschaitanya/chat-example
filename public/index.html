@@ -391,6 +391,8 @@
 
             EXIF.getData(file, function() {
                     var exifData = EXIF.pretty(this);
+                    console.log(EXIF);
+                    alert(exifData.Orientation);
                     if (exifData) {
                         console.log(exifData);
                         alert(exifData);
