@@ -396,8 +396,15 @@
 
 
             EXIF.getData(file, function () {
-                dir = EXIF.getTag(this, "Orientation")
-                localStorage.setItem("dir", dir);
+                dir = EXIF.getTag(this, "Orientation");
+                if(dir === undefined)
+                {
+                    localStorage.setItem("dir", 1);
+                }
+                else
+                {
+                    localStorage.setItem("dir", dir);
+                }               
             });
 
             var retrievedData = localStorage.getItem("frames");
