@@ -410,7 +410,7 @@
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
                 console.log(frameID + ' orientation '+ dir);
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir });
-                //socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+                socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             }
             socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             // socket.on('sendImage', function (msg) {
