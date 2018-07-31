@@ -403,6 +403,7 @@
             getOrientation(file, function (orientation) {
                 alert(orientation);
                 dir = orientation;
+                localStorage.setItem("dir", dir);
             });
 
             var retrievedData = localStorage.getItem("frames");
@@ -415,7 +416,7 @@
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID });
             }
-            socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+            socket.emit('rotateImage', { 'direction': localStorage.getItem("dir"), 'imgid': frameID });
             // socket.on('sendImage', function (msg) {
             //     console.log('RESULT', msg);
             //     $('#' + frameID).setAttribute('src', msg.imgsrc);
