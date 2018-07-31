@@ -316,6 +316,7 @@
             socket.on('sendImage', function (msg) {
                 console.log('RESULT 222', msg);
                 $('#' + msg.imgid).removeClass("hidden");
+                console.log('socket.on(sendImage, function (msg) ' + msg);
                 resetOrientation(msg.imgsrc, msg.orientation, function (resetBase64Image) {
                     //originalImagethis.src = resetBase64Image;
                     document.getElementById(msg.imgid).setAttribute('src', resetBase64Image);
@@ -407,10 +408,11 @@
             });
             reader.onloadend = function () {
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
+                console.log(JSON.parse("{'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir }"));
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir });
-                socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+                //socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             }
-            //socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+            socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             // socket.on('sendImage', function (msg) {
             //     console.log('RESULT', msg);
             //     $('#' + frameID).setAttribute('src', msg.imgsrc);
