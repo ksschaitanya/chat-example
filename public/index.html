@@ -408,7 +408,7 @@
             });
             reader.onloadend = function () {
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
-                console.log(JSON.parse("{'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir }"));
+                console.log(frameID + ' orientation '+ dir);
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir });
                 //socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             }
