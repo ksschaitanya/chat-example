@@ -131,6 +131,7 @@
             });
 
             socket.on('rotateImage', function (msg) {
+                console.log('socket.on(rotateImage, function (msg) ' + msg.direction);
                 var originalImageNew = document.getElementById(msg.imgid);
                 resetOrientation(originalImageNew.src, msg.direction, function (resetBase64Image) { originalImageNew.src = resetBase64Image; });
             });
