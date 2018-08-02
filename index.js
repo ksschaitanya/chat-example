@@ -14,6 +14,8 @@ var path = require('path');
 var express = require('express');
 var app = express();
 
+var crypto = require('crypto');
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
@@ -51,3 +53,22 @@ io.on('connection', function(socket){
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
+
+var encrypt = function(text){
+  var algorithm = 'aes-256-ctr';
+  var password = 'gh6ttr';
+  var cipher = crypto.createCipher(algorithm,password)
+  var crypted = cipher.update(JSON.stringify(text),'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+var decrypt = function(text){
+  var algorithm = 'aes-256-ctr';
+  var password = 'gh6ttr';
+  var decipher = crypto.createDecipher(algorithm,password)
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return JSON.decode(dec);
+}
+
