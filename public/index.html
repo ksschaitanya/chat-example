@@ -271,7 +271,7 @@
             $('#newFrameCode').html(code);
             $('#newFrameCodeMessage').html('enter code on QuikPic frame');
             $('#newFrameButton').addClass('hidden');
-            var encrypt = crypto();
+            var encrypt = require('crypto');
             var encrypted = encrypt('test');
             console.log('encrypted is ', encrypted);
 
