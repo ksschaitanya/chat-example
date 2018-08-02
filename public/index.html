@@ -271,14 +271,11 @@
             $('#newFrameCode').html(code);
             $('#newFrameCodeMessage').html('enter code on QuikPic frame');
             $('#newFrameButton').addClass('hidden');
-            var encrypt = require('crypto');
-            var encrypted = encrypt('test');
-            console.log('encrypted is ', encrypted);
-
-            var decrypted = decrypt(encrypted);
-            console.log('decrypted is ', decrypted);
-            //var socket = io();
+            
+            var socket = io();
             //socket.emit('newframecode', 'refresh');
+            socket.emit('encrypt', 'test');
+            //socket.emit('decrypt', 'test');
         }
 
         // Client Activated Code from anywhere
@@ -302,6 +299,14 @@
         // Socket IO calls
         $(function () {
             var socket = io();
+
+            socket.on('encrypt', function (msg) {
+                console.log(msg);
+            });
+
+            socket.on('decrypt', function (msg) {
+                console.log(msg);
+            });
 
             socket.on('chat message', function (msg) {
                 if (msg === 'checksession') {

@@ -54,6 +54,18 @@ http.listen(port, function(){
   console.log('listening on *:' + port);
 });
 
+io.on('connection', function(socket){
+  socket.on('encrypt', function(msg){    
+    io.emit('encrypt', encrypt(msg));
+  });
+});
+
+io.on('connection', function(socket){
+  socket.on('decrypt', function(msg){    
+    io.emit('decrypt', decrypt(msg));
+  });
+});
+
 var encrypt = function(text){
   var algorithm = 'aes-256-ctr';
   var password = 'gh6ttr';
