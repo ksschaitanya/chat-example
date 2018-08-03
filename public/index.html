@@ -271,14 +271,14 @@
             $('#newFrameCode').html(code);
             $('#newFrameCodeMessage').html('enter code on QuikPic frame');
             $('#newFrameButton').addClass('hidden');
-            
+
             var socket = io();
             //socket.emit('newframecode', 'refresh');
             var strTest = 'http://s3.amazonaws.com/assets/images/layout/header.jpg';
             console.log(strTest);
-            var newStrTest = socket.emit('encrypt', strTest);
+            var newStrTest = EncryptFun(strTest);
             console.log(newStrTest);
-            socket.emit('decrypt', newStrTest);
+            console.log(DecryptFun(newStrTest));
             //socket.emit('decrypt', 'test');
         }
 
@@ -298,6 +298,26 @@
                 var socket = io();
                 socket.emit('newframecode', c);
             }
+        }
+
+        function EncryptFun(msg) {
+            var text2 = "";
+            var socket = io();
+            socket.on('encrypt', function (msg) {
+                console.log(msg);
+                text2 = msg;
+                return text2;
+            });
+        }
+
+        function DecryptFun(msg) {
+            var text2 = "";
+            var socket = io();
+            socket.on('decrypt', function (msg) {
+                console.log(msg);
+                text2 = msg;
+                return text2;
+            });
         }
 
         // Socket IO calls
