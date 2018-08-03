@@ -306,6 +306,7 @@
 
             socket.on('encrypt', function (msg) {
                 console.log(msg);
+                return msg;
             });
 
             socket.on('decrypt', function (msg) {
