@@ -211,6 +211,9 @@
             $scope.hidePrefs();
         });
 
+        var originalImage = document.getElementById("img");
+        var encryptedText = "";
+
         // Actual Login Function
         function Login() {
             $.ajax({
@@ -276,10 +279,10 @@
             //socket.emit('newframecode', 'refresh');
             var strTest = 'http://s3.amazonaws.com/assets/images/layout/header.jpg';
             console.log(strTest);
-            var newStrTest = EncryptFun(strTest);
-            console.log(newStrTest);
+            socket.emit('encrypt', strTest);
+            console.log(encryptedText);
             console.log(DecryptFun(newStrTest));
-            //socket.emit('decrypt', 'test');
+            socket.emit('decrypt', encryptedText);
         }
 
         // Client Activated Code from anywhere
@@ -300,37 +303,18 @@
             }
         }
 
-        function EncryptFun(msg) {
-            var text2 = "";
-            var socket = io();
-            socket.on('encrypt', function (msg) {
-                console.log(msg);
-                text2 = msg;
-                return text2;
-            });
-        }
-
-        function DecryptFun(msg) {
-            var text2 = "";
-            var socket = io();
-            socket.on('decrypt', function (msg) {
-                console.log(msg);
-                text2 = msg;
-                return text2;
-            });
-        }
-
         // Socket IO calls
         $(function () {
             var socket = io();
 
             socket.on('encrypt', function (msg) {
                 console.log(msg);
-                return msg;
+                encryptedText = msg;
             });
 
             socket.on('decrypt', function (msg) {
                 console.log(msg);
+                encryptedText = "";
             });
 
             socket.on('chat message', function (msg) {
@@ -403,8 +387,6 @@
             });
 
         });
-
-        var originalImage = document.getElementById("img");
 
         function myFunction(element) {
             var frameID = element.id;
