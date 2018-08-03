@@ -278,10 +278,8 @@
             var socket = io();
             //socket.emit('newframecode', 'refresh');
             var strTest = 'http://s3.amazonaws.com/assets/images/layout/header.jpg';
-            console.log(strTest);
             socket.emit('encrypt', strTest);
             console.log(encryptedText);
-            console.log(DecryptFun(newStrTest));
             socket.emit('decrypt', encryptedText);
         }
 
