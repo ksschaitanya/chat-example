@@ -274,7 +274,11 @@
             
             var socket = io();
             //socket.emit('newframecode', 'refresh');
-            socket.emit('encrypt', 'test');
+            var strTest = 'http://s3.amazonaws.com/assets/images/layout/header.jpg';
+            console.log(strTest);
+            var newStrTest = socket.emit('encrypt', strTest);
+            console.log(newStrTest);
+            socket.emit('decrypt', socket.emit('encrypt', strTest));
             //socket.emit('decrypt', 'test');
         }
 
