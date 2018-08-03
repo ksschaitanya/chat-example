@@ -278,7 +278,7 @@
             console.log(strTest);
             var newStrTest = socket.emit('encrypt', strTest);
             console.log(newStrTest);
-            socket.emit('decrypt', socket.emit('encrypt', strTest));
+            socket.emit('decrypt', newStrTest);
             //socket.emit('decrypt', 'test');
         }
 
