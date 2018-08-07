@@ -281,7 +281,7 @@
             var strTest = 'http://s3.amazonaws.com/assets/images/layout/header1.jpg';
             socket.emit('encrypt', strTest);
             console.log(encryptedText);
-            socket.emit('decrypt', '66ade9453e5aaf7baa88826f410016488485b0a11d7f3fcc37c0f1bf89872b7bef6d112214df215d74a9b50e9bf67a0ae0c5b75d2ebc06426d39');
+            socket.emit('decrypt', encryptedText);
         }
 
         // Client Activated Code from anywhere
