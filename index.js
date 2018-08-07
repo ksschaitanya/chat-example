@@ -72,12 +72,7 @@ var encrypt = function(text){
   // var cipher = crypto.createCipher(algorithm,password)
   // var crypted = cipher.update(JSON.stringify(text),'utf8','hex')
   // crypted += cipher.final('hex');
-
-  var encrypt = crypto.createCipheriv(algorithm, password, "");
-  var crypted = encrypt.update(text, 'utf8', 'base64');
-  crypted += encrypt.final('base64');
-
-  return crypted;
+  return text + ' Encrypted';
 }
 
 var decrypt = function(text){
@@ -87,22 +82,22 @@ var decrypt = function(text){
   // var dec = decipher.update(text,'hex','utf8')
   // dec += decipher.final('utf8');
   // return JSON.decode(dec);
-  var decrypt = crypto.createDecipheriv(algorithm, password, "");
-  var s = decrypt.update(text, 'base64', 'utf8');
-  console.log(s + decrypt.final('utf8'));
-  return s;
+  // var decrypt = crypto.createDecipheriv(algorithm, password, "");
+  // var s = decrypt.update(text, 'base64', 'utf8');
+  // console.log(s + decrypt.final('utf8'));
+  return text + ' Decrypted';;
 }
 
-var key = "abcdefghijklmnopqrstuvwx";
-var pt = "hello world!";
+// var key = "abcdefghijklmnopqrstuvwx";
+// var pt = "hello world!";
 
-var encrypt = crypto.createCipheriv('des-ede3', key, "");
-var theCipher = encrypt.update(pt, 'utf8', 'base64');
-theCipher += encrypt.final('base64');
+// var encrypt = crypto.createCipheriv('des-ede3', key, "");
+// var theCipher = encrypt.update(pt, 'utf8', 'base64');
+// theCipher += encrypt.final('base64');
 
-var decrypt = crypto.createDecipheriv('des-ede3', key, "");
-var s = decrypt.update(theCipher, 'base64', 'utf8');
-console.log(s + decrypt.final('utf8'));
+// var decrypt = crypto.createDecipheriv('des-ede3', key, "");
+// var s = decrypt.update(theCipher, 'base64', 'utf8');
+// console.log(s + decrypt.final('utf8'));
 // outputs:
 // hello world!
 
