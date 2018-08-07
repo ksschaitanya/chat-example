@@ -73,7 +73,7 @@ var encrypt = function(text){
   // var crypted = cipher.update(JSON.stringify(text),'utf8','hex')
   // crypted += cipher.final('hex');
 
-  var encrypt = crypto.createCipheriv('des-ede3', password, "");
+  var encrypt = crypto.createCipheriv(algorithm, password, "");
   var crypted = encrypt.update(text, 'utf8', 'base64');
   crypted += encrypt.final('base64');
 
