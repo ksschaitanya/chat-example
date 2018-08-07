@@ -213,6 +213,7 @@
 
         var originalImage = document.getElementById("img");
         var encryptedText = "";
+        var decryptedText = "";
         window.URL = window.URL || window.webkitURL;
 
         // Actual Login Function
@@ -313,6 +314,7 @@
 
             socket.on('decrypt', function (msg) {
                 console.log(msg);
+                decryptedText = msg;
             });
 
             socket.on('chat message', function (msg) {

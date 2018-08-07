@@ -14,7 +14,13 @@ var path = require('path');
 var express = require('express');
 var app = express();
 
-var crypto = require('crypto');
+var crypto = require('crypto'),
+algorithm = 'aes-256-ctr',
+//password = crypto.randomBytes(32);
+password = 'abcde12345abcde12345abcde1234511';
+//var iv = new Buffer(crypto.randomBytes(16));
+var iv = 'abcde12345abcde1';
+var ivstring = iv.toString('hex').slice(0, 16);
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -66,38 +72,17 @@ io.on('connection', function(socket){
   });
 });
 
-var encrypt = function(text){
-  var algorithm = 'aes-256-ctr';
-  var password = 'gh6ttr';
-  // var cipher = crypto.createCipher(algorithm,password)
-  // var crypted = cipher.update(JSON.stringify(text),'utf8','hex')
-  // crypted += cipher.final('hex');
-  return text + ' Encrypted';
+
+function encrypt(text){
+  var cipher = crypto.createCipheriv(algorithm,password,ivstring);
+  var crypted = cipher.update(text,'utf8','hex')
+  crypted += cipher.final('hex');
+  return crypted;
 }
-
-var decrypt = function(text){
-  var algorithm = 'aes-256-ctr';
-  var password = 'gh6ttr';
-  // var decipher = crypto.createDecipher(algorithm,password)
-  // var dec = decipher.update(text,'hex','utf8')
-  // dec += decipher.final('utf8');
-  // return JSON.decode(dec);
-  // var decrypt = crypto.createDecipheriv(algorithm, password, "");
-  // var s = decrypt.update(text, 'base64', 'utf8');
-  // console.log(s + decrypt.final('utf8'));
-  return text + ' Decrypted';;
+ 
+function decrypt(text){
+  var decipher = crypto.createDecipheriv(algorithm,password,ivstring);
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return dec;
 }
-
-// var key = "abcdefghijklmnopqrstuvwx";
-// var pt = "hello world!";
-
-// var encrypt = crypto.createCipheriv('des-ede3', key, "");
-// var theCipher = encrypt.update(pt, 'utf8', 'base64');
-// theCipher += encrypt.final('base64');
-
-// var decrypt = crypto.createDecipheriv('des-ede3', key, "");
-// var s = decrypt.update(theCipher, 'base64', 'utf8');
-// console.log(s + decrypt.final('utf8'));
-// outputs:
-// hello world!
-
