@@ -213,6 +213,7 @@
 
         var originalImage = document.getElementById("img");
         var encryptedText = "";
+        window.URL = window.URL || window.webkitURL;
 
         // Actual Login Function
         function Login() {
@@ -280,7 +281,7 @@
             var strTest = 'http://s3.amazonaws.com/assets/images/layout/header1.jpg';
             socket.emit('encrypt', strTest);
             console.log(encryptedText);
-            socket.emit('decrypt', encryptedText);
+            socket.emit('decrypt', '66ade9453e5aaf7baa88826f410016488485b0a11d7f3fcc37c0f1bf89872b7bef6d112214df215d74a9b50e9bf67a0ae0c5b75d2ebc06426d39');
         }
 
         // Client Activated Code from anywhere
@@ -312,7 +313,6 @@
 
             socket.on('decrypt', function (msg) {
                 console.log(msg);
-                encryptedText = "";
             });
 
             socket.on('chat message', function (msg) {
@@ -400,10 +400,16 @@
             socket.emit('chat message', command);
         }
 
+        // Upload Image function call
         function encodeImageFileAsURLNEW(element) {
+
+            window.URL = window.URL || window.webkitURL;
+
             console.log('image ID as ', element.id);
             var socket = io();
             var file = element.files[0];
+            var urlblob = window.URL.createObjectURL(file);
+            alert(urlblob);
             var reader = new FileReader();
             var frameID = element.id;
             frameID = frameID.replace("imgID", "");
