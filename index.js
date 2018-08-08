@@ -152,10 +152,10 @@ var users=[
                 res.status(403).json({
                   message:"Wrong Token"
                 });
-                if(401 == err.status) {
+                if(res.status(401)) {
                   res.redirect('/login.html')
                 }
-                if(403 == err.status) {
+                if(res.status(403)) {
                   res.redirect('/login.html')
                 }
               }
