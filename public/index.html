@@ -216,6 +216,10 @@
         var decryptedText = "";
         window.URL = window.URL || window.webkitURL;
 
+        $(document).ready(function () {
+            verifyJWT();
+        });
+
         // Actual Login Function
         function Login() {
             $.ajax({
@@ -556,6 +560,24 @@
             socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
         }
 
+        function verifyJWT() {
+            console.log("verifyJWT here");
+            var xhttp = new XMLHttpRequest();
+            data = { token: document.getElementById("token").value }
+            console.log(data);
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var response = JSON.parse(xhttp.responseText);
+                    console.log("all good");
+                }
+                if (xhttp.readyState == 4 && xhttp.status == 403) {
+                    document.getElementById("list").innerHTML = JSON.parse(xhttp.responseText).message;
+                }
+            };
+            xhttp.open("POST", "http://quikpic.herokuapp.com/verifyJWT", true);
+            xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+            xhttp.send(JSON.stringify(data));
+        }
 
     </script>
 </body>
