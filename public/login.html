@@ -38,6 +38,7 @@
                     <input  type="text" class="form-control" id="token" placeholder="token" ></input>
                 </div>
                 <button type="button" class="btn btn-primary center-block" onclick="getlist()">Get List</button>
+                <button type="button" class="btn btn-primary center-block" onclick="verifyJWT()">Get List</button>
             </form>
             <div id="list">
             </div>
@@ -81,6 +82,24 @@
                     }
                 };
                 xhttp.open("POST", "http://quikpic.herokuapp.com/getusers", true);
+                xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+                xhttp.send(JSON.stringify(data));
+            }
+            verifyJWT= function(){
+                console.log("verifyJWT here");
+                var xhttp = new XMLHttpRequest();
+               data={token:document.getElementById("token").value}
+               console.log(data);
+                xhttp.onreadystatechange = function() {
+                    if (xhttp.readyState==4 && xhttp.status==200) {
+                        var response = JSON.parse(xhttp.responseText);
+                        console.log("all good");
+                    }
+                    if(xhttp.readyState==4 && xhttp.status==403){
+                      document.getElementById("list").innerHTML=JSON.parse(xhttp.responseText).message;
+                    }
+                };
+                xhttp.open("POST", "http://quikpic.herokuapp.com/verifyJWT", true);
                 xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
                 xhttp.send(JSON.stringify(data));
             }

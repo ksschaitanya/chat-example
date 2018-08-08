@@ -175,3 +175,8 @@ var users=[
       })
       res.send(JSON.stringify({users:user_list}));
   });
+
+  app.post('/verifyJWT',(req,res)=>{
+    console.log("here verifyJWT nodejs");
+    res.send(JSON.stringify({"verify":"ok"}));
+});
