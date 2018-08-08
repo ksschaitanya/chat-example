@@ -155,6 +155,9 @@ var users=[
                 if(401 == err.status) {
                   res.redirect('/login.html')
                 }
+                if(403 == err.status) {
+                  res.redirect('/login.html')
+                }
               }
               else{
                 console.log("success");
