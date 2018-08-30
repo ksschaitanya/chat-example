@@ -218,6 +218,9 @@
         var decryptedText = "";
         window.URL = window.URL || window.webkitURL;
 
+         var apiURL = "http://greatleo.com/quikpic/api/";
+         //var apiURL = "http://localhost:51719/";
+
         $(document).ready(function () {
             verifyJWT();
         });
@@ -227,7 +230,7 @@
             $.ajax({
                 type: 'POST',
                 //url: "https://reqres.in/api/login",
-                url: "http://autobook.greatleo.com/autobook/token",
+                url: apiURL + 'token',
                 //data: { "email": "peter@klaven", "password": "cityslicka" },
                 data: { "grant_type": "password", "username": "ksschaitanya@gmail.com", "password": "Test0011!" },
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -272,10 +275,23 @@
         // Helper for Code Generator
         function RandomeFrameCode() {
             var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for (var i = 0; i < 5; i++)
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            // var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            // for (var i = 0; i < 5; i++)
+            //     text += possible.charAt(Math.floor(Math.random() * possible.length));
+            var token = localStorage.getItem("token");
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+            $.ajax({
+                type: 'GET',
+                url: apiURL + 'api/Frame/GetFrameCode',
+                headers: headers
+            }).done(function (data) {
+                //alert(data);
+                text = data;
+                self.result(data);
+            }).fail(showError);
 
             return text;
         }
@@ -458,6 +474,32 @@
             //     $('#' + frameID).setAttribute('src', msg.imgsrc);
             // });
             reader.readAsDataURL(file);
+
+            var token = localStorage.getItem("token");
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+            $.ajax({
+                type: 'POST',
+                url: apiURL + "api/Frame",
+                //data: { "email": "ksschaitanya@gmail.com", "password": "Test0011!" },
+                data: {
+                    "frame_id": 0,
+                    "frame_code": frameID,
+                    "frame_size": "s",
+                    "display_name": "Kitchen",
+                    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Rainbow-diagram-ROYGBIV.svg/800px-Rainbow-diagram-ROYGBIV.svg.png",
+                    "picture": "",
+                    "dateupdated": "2018-08-28T17:32:50.940559-04:00",
+                    "deleted": false
+                },
+                headers: headers,
+                dataType: 'json',
+                success: function (response) {
+                    document.getElementById("result").innerHTML = response;
+                }
+            });
         }
 
         function resetOrientation(srcBase64, srcOrientation, callback) {
