@@ -290,10 +290,11 @@
             }).done(function (data) {
                 //alert(data);
                 text = data;
+                return text;
                 self.result(data);
             }).fail(showError);
 
-            return text;
+            // return text;
         }
 
         // Button Click on the Add New Frame
