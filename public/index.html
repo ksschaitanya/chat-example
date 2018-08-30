@@ -290,6 +290,9 @@
             }).done(function (data) {
                 //alert(data);
                 text = data;
+                $('#newFrameCode').html(text);
+                $('#newFrameCodeMessage').html('enter code on QuikPic frame');
+                $('#newFrameButton').addClass('hidden');
                 return text;
                 self.result(data);
             }).fail(showError);
