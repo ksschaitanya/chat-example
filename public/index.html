@@ -240,15 +240,46 @@
                 success: function (response) {
                     //token for reqres
                     //alert(response.token);
-                    alert(response.access_token);
+                    //alert(response.access_token);
                     localStorage.setItem("token", response.access_token);
                     $('#AdminPanel').removeClass("hidden");
                     $('#ngdivscope').removeClass("hidden");
                     //$('#ClientPanel').addClass("hidden");
                     document.getElementById("result").innerHTML = localStorage.getItem("session");
+                    GetFrames();    
                 }
             });
         }
+
+        // GetFrames
+        function GetFrames()
+        {
+            var token = localStorage.getItem("token");
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+            $.ajax({
+                type: 'GET',
+                url: apiURL + 'api/Frame/GetFrames',
+                headers: headers,
+                dataType: 'json',
+                success: function (response) {
+                    if (localStorage.getItem("frames2") === null) {                    
+                        localStorage.setItem("frames2", response);
+                        }
+                    else {
+                    var retrievedData2 = localStorage.getItem("frames2");
+                    console.log(retrievedData2);
+                    }    
+                },
+                error: function (response) {
+                alert("Error");
+                    }
+            });
+        }
+
+
 
         // Actual Logout Function
         function Logout() {
@@ -378,7 +409,7 @@
             });
 
             socket.on('newframecode', function (msg) {
-                alert($("#newFrameCode").html() + '---' + msg);
+                //alert($("#newFrameCode").html() + '---' + msg);
 
                 if (msg == $("#newFrameCode").html().replace(/\"/g, ''))
                 {
