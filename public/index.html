@@ -295,7 +295,7 @@
                 $('#newFrameCode').html(text);
                 $('#newFrameCodeMessage').html('enter code on QuikPic frame');
                 $('#newFrameButton').addClass('hidden');
-                return text;
+                //return text;
                 self.result(data);
             }).fail(showError);
 
@@ -305,10 +305,11 @@
         // Button Click on the Add New Frame
         function newFrame() {
             console.log("API CALL TO GET New Frame Code RandomeFrameCode");
-            var code = RandomeFrameCode();
-            $('#newFrameCode').html(code);
-            $('#newFrameCodeMessage').html('enter code on QuikPic frame');
-            $('#newFrameButton').addClass('hidden');
+            RandomeFrameCode();
+            //var code = RandomeFrameCode();
+            // $('#newFrameCode').html(code);
+            // $('#newFrameCodeMessage').html('enter code on QuikPic frame');
+            // $('#newFrameButton').addClass('hidden');
 
             var socket = io();
             //socket.emit('newframecode', 'refresh');
@@ -377,6 +378,7 @@
             });
 
             socket.on('newframecode', function (msg) {
+                alert($('#newFrameCode').val() + '---' + msg);
 
                 if (msg == $('#newFrameCode').val())
                 {
