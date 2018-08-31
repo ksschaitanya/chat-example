@@ -378,9 +378,9 @@
             });
 
             socket.on('newframecode', function (msg) {
-                alert($('#newFrameCode').val() + '---' + msg);
+                alert($("#newFrameCode").html() + '---' + msg);
 
-                if (msg == $('#newFrameCode').val())
+                if (msg == $("#newFrameCode").html().replace(/\"/g, ''))
                 {
 
                 
