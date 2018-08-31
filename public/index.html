@@ -378,6 +378,11 @@
 
             socket.on('newframecode', function (msg) {
 
+                if (msg == $('#newFrameCode').val())
+                {
+
+                
+
                 // Get this through count
                 var numItems = $('.card').length;
                 var framecontrol = "#framecontrol";
@@ -442,6 +447,8 @@
                 }
             }).fail(showError);
 
+                }
+            
             });
 
         });
