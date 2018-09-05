@@ -170,6 +170,7 @@ var users=[
             res.status(403).json({
               message:"No Token"
             });
+            res.redirect('/login.html')
           }
   });
   
