@@ -344,6 +344,11 @@
             //     $scope.recordsNEW = framesArry;
             // }
 
+                var retrievedData = localStorage.getItem("frames2");
+                var framesArry = JSON.parse(retrievedData);
+                localStorage.setItem("frames2", JSON.stringify(framesArry));
+                $scope.recordsNEW = framesArry;
+
             $scope.$apply();
 
             $('#parent2NEW').append('<div id="newframediv" class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
@@ -778,15 +783,15 @@
             var data = JSON.parse(retrievedData);
 
             for (var i = 0; i < data.length; i++) {
-                if (data[i].frame_code === v) {
+                if (data[i].frame_code === imgID) {
                     data[i].image_url = xhttp;
                     break;
                 }
             }
             localStorage.setItem("frames2", JSON.stringify(data));
-            var $scope = getScope('myCtrl');
-            $scope.recordsNEW = data;
-            $scope.$apply();
+            // var $scope = getScope('myCtrl');
+            // $scope.recordsNEW = data;
+            // $scope.$apply();
 
         }
 
