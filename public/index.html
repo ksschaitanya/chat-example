@@ -140,6 +140,30 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="parent2NEW" class="row">
+                    <div class="col-md-4" ng-repeat="x in recordsNEW">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">{{x.frame_code}}</h4>
+                            </div>
+                            <img id="{{x.frame_code}}" class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;"
+                                ng-src="{{x.image_url}}" data-holder-rendered="true">
+                            <div class="card-body">
+                                <div id="framecontrol">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
+                                        <input class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
+                                        <label tabindex="0" for="{{'imgID'+ x.frame_code}}" class="input-file-trigger">Upload</label>
+                                        <button type="button" id="{{'btnID'+ x.frame_code}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
+                                        <button type="button" id="{{'refreshID'+ x.frame_code}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -272,6 +296,7 @@
                     var retrievedData2 = localStorage.getItem("frames2");
                     console.log(retrievedData2);
                     }    
+                    LoadFrames();
                 },
                 error: function (response) {
                 alert("Error");
@@ -279,10 +304,39 @@
             });
         }
 
+        function LoadFrames()
+        {
+            var $scope = getScope('myCtrl');
+
+                if (localStorage.getItem("frames2") === null) {
+                    $scope.recordsNEW = [
+                        {
+                            "frame_code": 'NEW CODE',
+                            "image_url": "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22348%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20348%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16450dd1175%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A17pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16450dd1175%22%3E%3Crect%20width%3D%22348%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22116.45000076293945%22%20y%3D%22120.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                        }
+                    ];
+                    localStorage.setItem("frames2", JSON.stringify($scope.records));
+                }
+                else {
+                    //$('#parent2').empty();
+                    var retrievedData = localStorage.getItem("frames2");
+                    var framesArry = JSON.parse(retrievedData);
+                    localStorage.setItem("frames2", JSON.stringify(framesArry));
+                    $scope.recordsNEW = framesArry;
+                }
+
+                $scope.$apply();
+
+                $('#parent2NEW').append('<div id="newframediv" class="col-md-4"><div class="card mb-4 box-shadow"><div class="card-header"><h4 class="my-0 font-weight-normal">New Frame</h4></div><div class="card-body"><div id="' + newframecontrol + '"><button id="newFrameButton" type="button" onclick="newFrame()" class="btn btn-lg btn-block btn-primary">Add</button><h1 id="newFrameCode"></h1><br><h4 id="newFrameCodeMessage"></h4></div></div></div></div>');
+
+                 
+        }
+
         // Actual Logout Function
         function Logout() {
             localStorage.setItem("token", "");
             localStorage.removeItem("frames");
+            localStorage.removeItem("frames2");
             //$('#ClientPanel').removeClass("hidden");
             $('#AdminPanel').addClass("hidden");
             document.getElementById("result").innerHTML = localStorage.getItem("session");
