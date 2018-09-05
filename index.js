@@ -167,10 +167,10 @@ var users=[
             });
           }
           else{
+            res.redirect('http://quikpic.herokuapp.com/login.html');
             res.status(403).json({
-              message:"No Token"
+              message:"No Token XX"
             });
-            res.redirect('/login.html')
           }
   });
   
