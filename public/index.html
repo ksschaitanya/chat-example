@@ -592,6 +592,14 @@
 
             var retrievedData = localStorage.getItem("frames2");
             var framesArry = JSON.parse(retrievedData);
+            var frameIDParam = 0;
+
+            for (var i = 0; i < framesArry.length; i++) {
+                if (framesArry[i].frame_code === imgID) {
+                    frameIDParam = framesArry[i].frame_id;
+                    break;
+                }
+            }
 
             
             // framesArry.push({
@@ -600,6 +608,7 @@
             // });
             reader.onloadend = function () {
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
+                document.getElementById(frameID).setAttribute('src', msg.imgsrc);
                 console.log(frameID + ' orientation ' + dir);
                 alert(' orientation : ' + dir);
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir });
@@ -622,7 +631,7 @@
                 url: apiURL + "api/Frame",
                 //data: { "email": "ksschaitanya@gmail.com", "password": "Test0011!" },
                 data: {
-                    "frame_id": 0,
+                    "frame_id": frameIDParam,
                     "frame_code": frameID,
                     "frame_size": "s",
                     "display_name": "Kitchen",
