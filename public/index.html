@@ -150,11 +150,10 @@
                             <img id="{{x.frame_code}}" class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;"
                                 ng-src="{{x.image_url}}" data-holder-rendered="true">
                             <div class="card-body">
-                                <div id="framecontrol">
+                                <div id="framecontrol" style="text-align: center;">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
                                         <input class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
-                                        <label tabindex="0" for="{{'imgID'+ x.frame_code}}" class="input-file-trigger">Upload</label>
+                                        <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" />
                                         <button type="button" id="{{'btnID'+ x.frame_code}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.frame_code}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
                                     </div>
@@ -249,6 +248,7 @@
 
         $(document).ready(function () {
             verifyJWT();
+            GetFrames();
         });
 
         // Actual Login Function
@@ -299,7 +299,7 @@
                     LoadFrames();
                 },
                 error: function (response) {
-                    alert("Error");
+                    alert(response.error_description);
                 }
             });
         }
@@ -316,12 +316,14 @@
             $('#parent').addClass("hidden");
             $('#ngdivscope').removeClass("hidden");
             $('#parent2NEW > #newframediv').remove();
+            $('#AdminPanel').removeClass("hidden");
+            $('#ngdivscope').removeClass("hidden");
 
             var retrievedData = localStorage.getItem("frames2");
             var framesArry = JSON.parse(retrievedData);
 
             framesArry.forEach(function (d) {
-                alert(d['frame_code']);
+                //alert(d['frame_code']);
                 var diu = d['image_url'];
                 //alert(diu);
                 loadDoc(diu, myFunction1, d['frame_code']);
@@ -344,10 +346,10 @@
             //     $scope.recordsNEW = framesArry;
             // }
 
-                var retrievedData = localStorage.getItem("frames2");
-                var framesArry = JSON.parse(retrievedData);
-                localStorage.setItem("frames2", JSON.stringify(framesArry));
-                $scope.recordsNEW = framesArry;
+            var retrievedData = localStorage.getItem("frames2");
+            var framesArry = JSON.parse(retrievedData);
+            localStorage.setItem("frames2", JSON.stringify(framesArry));
+            $scope.recordsNEW = framesArry;
 
             $scope.$apply();
 
@@ -550,6 +552,12 @@
             socket.emit('chat message', command);
         }
 
+        function openDialog(element) {
+            alert(element.id);
+            document.getElementById(element.id.replace('b', '')).click();
+            //encodeImageFileAsURLNEW(element.id.replace('b', ''));
+        }
+
         // Upload Image function call
         function encodeImageFileAsURLNEW(element) {
 
@@ -559,7 +567,7 @@
             var socket = io();
             var file = element.files[0];
             var urlblob = window.URL.createObjectURL(file);
-            alert(urlblob);
+            //alert(urlblob);
             var reader = new FileReader();
             var frameID = element.id;
             frameID = frameID.replace("imgID", "");
@@ -752,7 +760,7 @@
 
         //loadDoc('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Rainbow-diagram-ROYGBIV.svg/800px-Rainbow-diagram-ROYGBIV.svg.png', myFunction1,'1df')
         // Convert ImageURL to blob
-        function loadDoc(url, cFunction,imgID) {
+        function loadDoc(url, cFunction, imgID) {
             var xhttp;
             xhttp = new XMLHttpRequest();
             // Ask for the result as an ArrayBuffer.
@@ -763,15 +771,15 @@
                     var blob = new Blob([arrayBufferView], { type: "image/jpeg" });
                     var urlCreator = window.URL || window.webkitURL;
                     var imageUrl = urlCreator.createObjectURL(blob);
-                    cFunction(imageUrl,imgID);
+                    cFunction(imageUrl, imgID);
                 }
             };
             xhttp.open("GET", url, true);
             xhttp.send();
         }
 
-        function myFunction1(xhttp,imgID) {
-            alert(xhttp);
+        function myFunction1(xhttp, imgID) {
+            //alert(xhttp);
             // var img = document.querySelector("#"+imgID);
             // img.src = xhttp;
             // img.onload = function() {
