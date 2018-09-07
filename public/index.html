@@ -553,10 +553,14 @@
         }
 
         function openDialog(element) {
-            alert(element.id);
-            //document.getElementById(element.id.replace('b', '')).click();
-            encodeImageFileAsURLNEW(document.getElementById(element.id.replace('b', '')));
+            //alert(element.id);
+            var b = element.id;
+            b = b.slice(0, -1);
+            //alert(b);
+            document.getElementById(b).click();
+            //encodeImageFileAsURLNEW(document.getElementById(element.id.replace('b', '')));
             // little change
+            
         }
 
         // Upload Image function call
@@ -622,7 +626,7 @@
                     "frame_code": frameID,
                     "frame_size": "s",
                     "display_name": "Kitchen",
-                    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Rainbow-diagram-ROYGBIV.svg/800px-Rainbow-diagram-ROYGBIV.svg.png",
+                    "image_url": "http://old.frenchpaper.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/4/5/4561_P_37.JPG",
                     "picture": "",
                     "dateupdated": "2018-08-28T17:32:50.940559-04:00",
                     "deleted": false
