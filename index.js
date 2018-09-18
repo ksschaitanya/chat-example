@@ -15,6 +15,10 @@ var express = require('express');
 var app = express();
 var bodyParser= require('body-parser');
 var jwt=require('jsonwebtoken');
+const aws = require('aws-sdk');
+const S3_BUCKET = process.env.S3_BUCKET;
+
+aws.config.region = 'us-east-1';
 
 var crypto = require('crypto'),
 algorithm = 'aes-256-ctr',
@@ -186,4 +190,36 @@ var users=[
   app.post('/verifyJWT',(req,res)=>{
     console.log("here verifyJWT nodejs");
     res.send(JSON.stringify({"verify":"ok"}));
+});
+
+app.get('/account', (req, res) => res.render('s3upload.html'));
+
+app.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
+
+app.post('/save-details', (req, res) => {
+  // TODO: Read POSTed form data and do something useful
 });
