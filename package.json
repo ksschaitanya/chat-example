@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "aws-sdk": "2.x",
     "express": "^4.15.2",
     "socket.io": "^1.7.3",
     "body-parser": "^1.17.2",
