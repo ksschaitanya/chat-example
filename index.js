@@ -195,9 +195,10 @@ app.post('/verifyJWT', (req, res) => {
 app.get('/account', (req, res) => res.render('s3upload.html'));
 
 app.get('/sign-s3', (req, res) => {
-  const s3 = new aws.S3();
+  //const s3 = new aws.S3();
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
+  alert(fileName);
   const s3Params = {
     Bucket: S3_BUCKET,
     Key: fileName,
@@ -208,10 +209,10 @@ app.get('/sign-s3', (req, res) => {
 
   var objectParams = {Bucket: S3_BUCKET, Key: fileName, Body: 'Hello World!'};
     // Create object upload promise
-    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    var uploadPromise = new aws.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
     uploadPromise.then(
       function(data) {
-        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+        console.log("Successfully uploaded data to " + S3_BUCKET + "/" + fileName);
 }).catch(
   function(err) {
     console.error(err, err.stack);
