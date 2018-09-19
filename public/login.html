@@ -64,6 +64,7 @@
                 console.log("here");
                 var xhttp = new XMLHttpRequest();
                data={token:document.getElementById("token").value}
+               localStorage.setItem("tokenJWT", document.getElementById("token").value);
                console.log(data);
                 xhttp.onreadystatechange = function() {
                     if (xhttp.readyState==4 && xhttp.status==200) {
