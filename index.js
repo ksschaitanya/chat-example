@@ -206,18 +206,29 @@ app.get('/sign-s3', (req, res) => {
     ACL: 'public-read'
   };
 
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.end();
-    }
+  var objectParams = {Bucket: S3_BUCKET, Key: fileName, Body: 'Hello World!'};
+    // Create object upload promise
+    var uploadPromise = new AWS.S3({apiVersion: '2006-03-01'}).putObject(objectParams).promise();
+    uploadPromise.then(
+      function(data) {
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+}).catch(
+  function(err) {
+    console.error(err, err.stack);
+});
+
+  // s3.getSignedUrl('putObject', s3Params, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return res.end();
+  //   }
     const returnData = {
-      signedRequest: data,
+      //signedRequest: data,
       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
     };
     res.write(JSON.stringify(returnData));
     res.end();
-  });
+  // });
 });
 
 app.post('/save-details', (req, res) => {
