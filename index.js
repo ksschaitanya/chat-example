@@ -145,38 +145,38 @@ app.post('/login', (req, res) => {
   }
 });
 
-app.use((req, res, next) => {
-  // check header or url parameters or post parameters for token
-  console.log(req.body);
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  if (token) {
-    console.log("token");
-    jwt.verify(token, "samplesecret", (err, decod) => {
-      if (err) {
-        res.status(403).json({
-          message: "Wrong Token"
-        });
-        if (res.status(401)) {
-          res.redirect('/login.html')
-        }
-        if (res.status(403)) {
-          res.redirect('/login.html')
-        }
-      }
-      else {
-        console.log("success");
-        req.decoded = decod;
-        next();
-      }
-    });
-  }
-  else {
-    res.redirect('http://quikpic.herokuapp.com/login.html');
-    res.status(403).json({
-      message: "No Token XX"
-    });
-  }
-});
+// app.use((req, res, next) => {
+//   // check header or url parameters or post parameters for token
+//   console.log(req.body);
+//   var token = req.body.token || req.query.token || req.headers['x-access-token'];
+//   if (token) {
+//     console.log("token");
+//     jwt.verify(token, "samplesecret", (err, decod) => {
+//       if (err) {
+//         res.status(403).json({
+//           message: "Wrong Token"
+//         });
+//         if (res.status(401)) {
+//           res.redirect('/login.html')
+//         }
+//         if (res.status(403)) {
+//           res.redirect('/login.html')
+//         }
+//       }
+//       else {
+//         console.log("success");
+//         req.decoded = decod;
+//         next();
+//       }
+//     });
+//   }
+//   else {
+//     res.redirect('http://quikpic.herokuapp.com/login.html');
+//     res.status(403).json({
+//       message: "No Token XX"
+//     });
+//   }
+// });
 
 app.post('/getusers', (req, res) => {
   var user_list = [];
