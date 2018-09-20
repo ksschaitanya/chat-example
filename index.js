@@ -207,27 +207,27 @@ app.get('/sign-s3', (req, res) => {
     ACL: 'public-read'
   };
 
-  var objectParams = { Bucket: S3_BUCKET, Key: fileName, Body: 'Hello World!' };
-  // Create object upload promise
-  var uploadPromise = new aws.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
-  uploadPromise.then(
-    function (data) {
-      console.log("Successfully uploaded data to " + S3_BUCKET + "/" + fileName);
-    }).catch(
-      function (err) {
-        console.error(err, err.stack);
-      });
+  // var objectParams = { Bucket: S3_BUCKET, Key: fileName, Body: 'Hello World!' };
+  // // Create object upload promise
+  // var uploadPromise = new aws.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
+  // uploadPromise.then(
+  //   function (data) {
+  //     console.log("Successfully uploaded data to " + S3_BUCKET + "/" + fileName);
+  //   }).catch(
+  //     function (err) {
+  //       console.error(err, err.stack);
+  //     });
 
 
-  const signedUrlExpireSeconds = 60 * 5
+  // const signedUrlExpireSeconds = 60 * 5
 
-  var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+  // var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
-  const url = s3.getSignedUrl('getObject', {
-    Bucket: S3_BUCKET,
-    Key: fileName,
-    Expires: signedUrlExpireSeconds
-  })
+  // const url = s3.getSignedUrl('getObject', {
+  //   Bucket: S3_BUCKET,
+  //   Key: fileName,
+  //   Expires: signedUrlExpireSeconds
+  // })
 
   //res.write(JSON.stringify(url));
   res.write(json.stringify("result:worked"));
