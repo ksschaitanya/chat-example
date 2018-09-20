@@ -43,6 +43,7 @@
 
     function getSignedRequest(file){
       var xhttp = new XMLHttpRequest();
+      data={fileName:file.name,fileType:file.type};
       xhttp.onreadystatechange = function() {
                     if (xhttp.readyState==4 && xhttp.status==200) {
                         var response = JSON.parse(xhttp.responseText);
@@ -53,9 +54,9 @@
                       console.log(JSON.parse(xhttp.responseText).message);
                     }
                 };
-                xhttp.open("POST", `http://quikpic.herokuapp.com/sign-s3NEW?file-name=${file.name}&file-type=${file.type}`, true);
-                //xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
-                xhttp.send();
+                xhttp.open("POST", 'http://quikpic.herokuapp.com/sign-s3NEW', true);
+                xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+                xhttp.send(JSON.stringify(data));
     }
 
     /*
