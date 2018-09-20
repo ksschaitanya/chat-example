@@ -1,18 +1,12 @@
 <html>
   <body>
 
-    <h1>Edit your account</h1>
-
-    <hr>
-
-    <h2>Your avatar</h2>
-
+    
     <input type="file" id="file-input">
     <p id="status">Please select a file</p>
     <img style="border:1px solid gray;width:300px;"  id="preview" src="/images/default.png">
 
-    <h2>Your information</h2>
-
+    
     <form method="POST" action="/save-details">
       <input type="hidden" id="avatar-url" name="avatar-url" value="/images/default.png">
       <input type="text" name="username" placeholder="Username"><br>
@@ -60,10 +54,12 @@
         if(xhr.readyState === 4){
           if(xhr.status === 200){
             const response = JSON.parse(xhr.responseText);
-            uploadFile(file, response.signedRequest, response.url);
+            //uploadFile(file, response.signedRequest, response.url);
           }
           else{
             alert('Could not get signed URL.');
+            console.log(JSON.parse(xhr));
+            console.log(JSON.parse(xhr.responseText).message);
           }
         }
       };

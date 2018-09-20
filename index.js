@@ -198,7 +198,7 @@ app.get('/sign-s3', (req, res) => {
   //const s3 = new aws.S3();
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
-  alert(fileName);
+  console.log(fileName);
   const s3Params = {
     Bucket: S3_BUCKET,
     Key: fileName,
@@ -229,7 +229,8 @@ app.get('/sign-s3', (req, res) => {
     Expires: signedUrlExpireSeconds
   })
 
-  res.write(JSON.stringify(url));
+  //res.write(JSON.stringify(url));
+  res.write(json.stringify("result:worked"));
   res.end();
   // });
 });
