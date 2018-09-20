@@ -194,6 +194,12 @@ app.post('/verifyJWT', (req, res) => {
 
 app.get('/account', (req, res) => res.render('s3upload.html'));
 
+app.get('/sign-s3NEW', (req, res) => {
+  res.write(json.stringify("result:worked"));
+  res.end();
+});
+
+
 app.get('/sign-s3', (req, res) => {
   //const s3 = new aws.S3();
   const fileName = req.query['file-name'];
