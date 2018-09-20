@@ -41,12 +41,29 @@
       xhr.send(file);
     }
 
+    function getSignedRequest(file){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+                    if (xhttp.readyState==4 && xhttp.status==200) {
+                        var response = JSON.parse(xhttp.responseText);
+                        var ul=document.createElement("p");
+                        document.getElementById("p").innerHTML=response;
+                    }
+                    if(xhttp.readyState==4 && xhttp.status==403){
+                      console.log(JSON.parse(xhttp.responseText).message);
+                    }
+                };
+                xhttp.open("POST", `http://quikpic.herokuapp.com/sign-s3NEW?file-name=${file.name}&file-type=${file.type}`, true);
+                //xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+                xhttp.send();
+    }
+
     /*
       Function to get the temporary signed request from the app.
       If request successful, continue to upload the file using this signed
       request.
     */
-    function getSignedRequest(file){
+    function getSignedRequestOLD(file){
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `http://quikpic.herokuapp.com/sign-s3NEW?file-name=${file.name}&file-type=${file.type}`);
       //xhr.open('GET', `/sign-s3NEW?file-name=${file.name}&file-type=${file.type}`);

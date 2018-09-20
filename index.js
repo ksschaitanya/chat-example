@@ -194,9 +194,8 @@ app.post('/verifyJWT', (req, res) => {
 
 app.get('/account', (req, res) => res.render('s3upload.html'));
 
-app.get('/sign-s3NEW', (req, res) => {
-  res.write(json.stringify("result:worked"));
-  res.end();
+app.post('/sign-s3NEW', (req, res) => {
+  res.send(json.stringify("result:worked"));
 });
 
 
