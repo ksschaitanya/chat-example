@@ -196,7 +196,7 @@ app.get('/account', (req, res) => res.render('s3upload.html'));
 
 app.post('/sign-s3NEW', (req, res) => {
   const fileName = req.body.fileName;
-  res.send(json.stringify({result: fileName}));
+  res.send(json.stringify({"result":  "ok"}));
 });
 
 
