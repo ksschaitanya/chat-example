@@ -92,6 +92,7 @@
         <button type="button" class="btn btn-outline-primary" onclick="Logout()">Logout</button>
         <button type="button" class="btn btn-outline-primary" onclick="verifyJWT()">ClientX</button>
     </div>
+    <button type="button" class="btn btn-outline-primary" onclick="verifyS3CALL()">S3CHECK</button>
 
     <input class="form-control" id="token" placeholder="token" type="text">
 
@@ -819,6 +820,29 @@
             // $scope.$apply();
 
         }
+
+
+        // S3 CALLS CHECK FROM HERE 
+        function verifyS3CALL() {
+            console.log("verifyJWT here");
+            var xhttp = new XMLHttpRequest();
+            data = { token: localStorage.getItem("token") }
+            console.log(data);
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var response = JSON.parse(xhttp.responseText);
+                    console.log("all good");
+                }
+                if (xhttp.readyState == 4 && xhttp.status == 403) {
+                    console.log("NOT good");
+                    console.log(JSON.parse(xhttp.responseText).message);
+                }
+            };
+            xhttp.open("POST", "http://quikpic.herokuapp.com/verifyS3CALL", true);
+            xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+            xhttp.send(JSON.stringify(data));
+        }
+
 
     </script>
 </body>

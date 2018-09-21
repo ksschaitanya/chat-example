@@ -15,10 +15,19 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
-const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
 
-aws.config.region = 'us-east-1';
+// Load the SDK and UUID
+var AWS = require('aws-sdk');
+AWS.config.region = 'us-east-1';
+// Create name for uploaded object key
+var keyName = 'user1/hello_world1.txt';
+
+
+
+
+
+
 
 var crypto = require('crypto'),
   algorithm = 'aes-256-ctr',
@@ -191,6 +200,23 @@ app.post('/verifyJWT', (req, res) => {
   console.log("here verifyJWT nodejs");
   res.send(JSON.stringify({ "verify": "ok" }));
 });
+
+/// FROM HERE S3 CALLS TEST
+
+app.post('/verifyS3CALL', (req, res) => {
+  
+  var s3 = new AWS.S3({apiVersion: '2006-03-01'});
+  const signedUrlExpireSeconds = 60 * 5;
+  
+  const url = s3.getSignedUrl('getObject', {
+      Bucket: S3_BUCKET,
+      Key: keyName,
+      Expires: signedUrlExpireSeconds
+  });
+  console.log(url);
+  res.send(JSON.stringify({ "verify": url }));
+});
+
 
 app.get('/account', (req, res) => res.render('s3upload.html'));
 
