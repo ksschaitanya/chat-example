@@ -217,6 +217,21 @@ app.post('/verifyS3CALL', (req, res) => {
   res.send(JSON.stringify({ "verify": url }));
 });
 
+app.post('/verifyS3UPLOADCALL', (req, res) => {
+  
+  // var s3 = new AWS.S3({apiVersion: '2006-03-01'});
+  // const signedUrlExpireSeconds = 60 * 5;
+  
+  // const url = s3.getSignedUrl('getObject', {
+  //     Bucket: S3_BUCKET,
+  //     Key: keyName,
+  //     Expires: signedUrlExpireSeconds
+  // });
+  // console.log(url);
+  const fileName = req.body.fileName;
+  res.send(JSON.stringify({ "verify": fileName }));
+});
+
 
 app.get('/account', (req, res) => res.render('s3upload.html'));
 
