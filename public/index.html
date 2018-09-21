@@ -849,7 +849,7 @@
             console.log("verifyJWT here");
             var xhttp = new XMLHttpRequest();
             data={fileName:file.name,fileType:file.type};
-            console.log(data);
+            console.log(file);
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
                     var response = JSON.parse(xhttp.responseText);
@@ -861,8 +861,9 @@
                 }
             };
             xhttp.open("POST", "http://quikpic.herokuapp.com/verifyS3UPLOADCALL", true);
-            xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
-            xhttp.send(JSON.stringify(data));
+            //xhttp.setRequestHeader("Content-type", 'application/json; charset=UTF-8');
+            xhttp.setRequestHeader("Content-Type", "image/png");
+            xhttp.send(file);
         }
 
             /*

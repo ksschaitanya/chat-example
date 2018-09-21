@@ -228,7 +228,7 @@ app.post('/verifyS3UPLOADCALL', (req, res) => {
   //     Expires: signedUrlExpireSeconds
   // });
   // console.log(url);
-  const fileName = req.body.fileName;
+  const fileName = req.body;
   res.send(JSON.stringify({ "verify": fileName }));
 });
 
