@@ -12,21 +12,21 @@
 
 var path = require('path');
 var express = require('express');
-var app = express();
+const multer = require('multer');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 const S3_BUCKET = process.env.S3_BUCKET;
+var fd = "";
+var fs = require('fs');
+
+var app = express();
 
 // Load the SDK and UUID
 var AWS = require('aws-sdk');
 AWS.config.region = 'us-east-1';
 // Create name for uploaded object key
-var keyName = 'user1/hello_world1.txt';
-
-
-
-
-
+var keyNameDW = 'user1/hello_world1.txt';
+var keyName = '';
 
 
 var crypto = require('crypto'),
@@ -203,6 +203,51 @@ app.post('/verifyJWT', (req, res) => {
 
 /// FROM HERE S3 CALLS TEST
 
+
+//MULTER CONFIG: to get file photos to temp server storage
+const multerConfig = {
+
+  //specify diskStorage (another option is memory)
+  storage: multer.diskStorage({
+
+    //specify destination
+    destination: function (req, file, next) {
+      next(null, './public/photo-storage');
+    },
+
+    //specify the filename to be unique
+    filename: function (req, file, next) {
+      console.log(file);
+      //get the file mimetype ie 'image/jpeg' split and prefer the second value ie'jpeg'
+      const ext = file.mimetype.split('/')[1];
+      //set the file fieldname to a unique name containing the original name, current datetime and the extension.
+      const savingFileName = file.fieldname + '-' + Date.now() + '.' + ext;
+      next(null, savingFileName);
+      // fd = '/public/photo-storage/'+savingFileName;
+      // console.log(fd);
+    }
+  }),
+  savingFileName: fd,
+
+  // filter out and prevent non-image files.
+  fileFilter: function (req, file, next) {
+    if (!file) {
+      next();
+    }
+
+    // only permit image mimetypes
+    const image = file.mimetype.startsWith('image/');
+    if (image) {
+      console.log('photo uploaded');
+      next(null, true);
+    } else {
+      console.log("file not supported")
+      //TODO:  A better message response to user on failure.
+      return next();
+    }
+  }
+};
+
 app.post('/verifyS3CALL', (req, res) => {
   
   var s3 = new AWS.S3({apiVersion: '2006-03-01'});
@@ -210,27 +255,88 @@ app.post('/verifyS3CALL', (req, res) => {
   
   const url = s3.getSignedUrl('getObject', {
       Bucket: S3_BUCKET,
-      Key: keyName,
+      Key: keyNameDW,
       Expires: signedUrlExpireSeconds
   });
   console.log(url);
   res.send(JSON.stringify({ "verify": url }));
 });
 
-app.post('/verifyS3UPLOADCALL', (req, res) => {
-  
-  // var s3 = new AWS.S3({apiVersion: '2006-03-01'});
-  // const signedUrlExpireSeconds = 60 * 5;
-  
-  // const url = s3.getSignedUrl('getObject', {
-  //     Bucket: S3_BUCKET,
-  //     Key: keyName,
-  //     Expires: signedUrlExpireSeconds
+app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (req, res) {
+  console.log('1- ' + __dirname + '/' + req.file.path);
+  console.log('2- ' + req.protocol + req.file.path);
+  console.log('3- ' + req.file.path);
+
+  keyName = req.file.path;
+  var keyName2 = keyName.replace('public\\photo-storage\\', '');
+  console.log('keyName---' + keyName);
+  console.log('keyName2---' + keyName2);
+  var url = '';
+
+  //// UPLOAD CALL ONLY
+  //// Create params for putObject call
+
+  fs.readFile(keyName, function (err, data) {
+    if (err) { throw err; }
+
+
+    var objectParams = { Bucket: bucketName, Key: keyName2, Body: data };
+    // Create object upload promise
+    var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
+    uploadPromise.then(
+      function (data) {
+        console.log(data);
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName2);
+
+        AWS.config.update({
+          // DOWNLOAD USER
+          accessKeyId: process.env.S3_DOWNLOADUSER, 
+          secretAccessKey: process.env.S3_DOWNLOADUSERPAS
+        });
+        console.log('keyName---' + keyName2);
+        var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+        const signedUrlExpireSeconds = 60 * 5
+        url = s3.getSignedUrl('getObject', {
+          Bucket: bucketName,
+          Key: keyName2,
+          Expires: signedUrlExpireSeconds
+        });
+        console.log('------->' + url);
+        res.send(url);
+        //surl = url;
+
+      }).catch(
+        function (err) {
+          console.error(err, err.stack);
+          res.send(err + ',' + err.stack);
+        });
+  });
+
+  // AWS.config.update({
+  //   // DOWNLOAD USER
+          // accessKeyId: process.env.S3_DOWNLOADUSER, 
+          // secretAccessKey: process.env.S3_DOWNLOADUSERPAS
   // });
-  // console.log(url);
-  const fileName = req.body;
-  res.send(JSON.stringify({ "verify": fileName }));
-});
+  // console.log('keyName---' + keyName2);
+  // var s3 = new AWS.S3({apiVersion: '2006-03-01'});
+  // const signedUrlExpireSeconds = 60 * 5
+  // const url = s3.getSignedUrl('getObject', {
+  //     Bucket: bucketName,
+  //     Key: keyName2,
+  //     Expires: signedUrlExpireSeconds
+  // })
+  // console.log(url)
+
+  //Here is where I could add functions to then get the url of the new photo
+  //And relocate that to a cloud storage solution with a callback containing its new url
+  //then ideally loading that into your database solution.   Use case - user uploading an avatar...
+
+  /// For now moving with in function
+
+  // res.send('<img width="40" height="40" src="'+url+'"/>');
+}
+
+);
 
 
 app.get('/account', (req, res) => res.render('s3upload.html'));
