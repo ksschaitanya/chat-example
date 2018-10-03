@@ -282,14 +282,14 @@ app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (
   fs.readFile(keyName, function (err, data) {
     if (err) { throw err; }
 
-    var objectParams = { Bucket: bucketName, Key: keyName2, Body: data };
+    var objectParams = { Bucket: S3_BUCKET, Key: keyName2, Body: data };
     // Create object upload promise
     var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
     uploadPromise.then(
       function (data) {
         console.log(data);
-        console.log("Successfully uploaded data to " + bucketName + "/" + keyName2);
-        res.send("Successfully uploaded data to " + bucketName + "/" + keyName2);
+        console.log("Successfully uploaded data to " + S3_BUCKET + "/" + keyName2);
+        res.send("Successfully uploaded data to " + S3_BUCKET + "/" + keyName2);
 
         // AWS.config.update({
         //   // DOWNLOAD USER
