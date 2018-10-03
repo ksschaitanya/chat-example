@@ -289,23 +289,23 @@ app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (
       function (data) {
         console.log(data);
         console.log("Successfully uploaded data to " + S3_BUCKET + "/" + keyName2);
-        res.send("Successfully uploaded data to " + S3_BUCKET + "/" + keyName2);
+        //res.send("Successfully uploaded data to " + S3_BUCKET + "/" + keyName2);
 
-        // AWS.config.update({
-        //   // DOWNLOAD USER
-        //   accessKeyId: process.env.S3_DOWNLOADUSER, 
-        //   secretAccessKey: process.env.S3_DOWNLOADUSERPAS
-        // });
-        // console.log('keyName---' + keyName2);
-        // var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-        // const signedUrlExpireSeconds = 60 * 5
-        // url = s3.getSignedUrl('getObject', {
-        //   Bucket: bucketName,
-        //   Key: keyName2,
-        //   Expires: signedUrlExpireSeconds
-        // });
-        // console.log('------->' + url);
-        // res.send(url);
+        AWS.config.update({
+          // DOWNLOAD USER
+          accessKeyId: process.env.S3_DOWNLOADUSER, 
+          secretAccessKey: process.env.S3_DOWNLOADUSERPAS
+        });
+        console.log('keyName---' + keyName2);
+        var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+        const signedUrlExpireSeconds = 60 * 5
+        url = s3.getSignedUrl('getObject', {
+          Bucket: S3_BUCKET,
+          Key: keyName2,
+          Expires: signedUrlExpireSeconds
+        });
+        console.log('------->' + url);
+        res.send(url);
         //surl = url;
 
       }).catch(
