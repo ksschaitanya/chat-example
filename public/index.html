@@ -95,11 +95,13 @@
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3CALL()">S3CHECK</button>
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3UPLOADCALL()">S3UPLOADCHECK</button>
     <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-        <input type="file" id="file-input1">
+        <label><input type="file" id="photo1" name="photo" /></label>
+        <input type="submit" name="Upload" value="Upload Photo"/>
     </form>
 
     <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-        <input type="file" id="file-input2">
+        <label><input type="file" id="photo2" name="photo" /></label>
+        <input type="submit" name="Upload" value="Upload Photo"/>
     </form>
     
     
