@@ -271,7 +271,7 @@ app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (
   console.log('3- ' + req.file.path);
 
   keyName = req.file.path;
-  var keyName2 = keyName.replace('public\\photo-storage\\', '');
+  var keyName2 = keyName.replace('public/photo-storage/' ,'');//('public\\photo-storage\\', '');
   console.log('keyName---' + keyName);
   console.log('keyName2---' + keyName2);
   var url = '';
@@ -279,40 +279,41 @@ app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (
   //// UPLOAD CALL ONLY
   //// Create params for putObject call
 
-  // // // fs.readFile(keyName, function (err, data) {
-  // // //   if (err) { throw err; }
+  fs.readFile(keyName, function (err, data) {
+    if (err) { throw err; }
 
-  // // //   var objectParams = { Bucket: bucketName, Key: keyName2, Body: data };
-  // // //   // Create object upload promise
-  // // //   var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
-  // // //   uploadPromise.then(
-  // // //     function (data) {
-  // // //       console.log(data);
-  // // //       console.log("Successfully uploaded data to " + bucketName + "/" + keyName2);
+    var objectParams = { Bucket: bucketName, Key: keyName2, Body: data };
+    // Create object upload promise
+    var uploadPromise = new AWS.S3({ apiVersion: '2006-03-01' }).putObject(objectParams).promise();
+    uploadPromise.then(
+      function (data) {
+        console.log(data);
+        console.log("Successfully uploaded data to " + bucketName + "/" + keyName2);
+        res.send("Successfully uploaded data to " + bucketName + "/" + keyName2);
 
-  // // //       AWS.config.update({
-  // // //         // DOWNLOAD USER
-  // // //         accessKeyId: process.env.S3_DOWNLOADUSER, 
-  // // //         secretAccessKey: process.env.S3_DOWNLOADUSERPAS
-  // // //       });
-  // // //       console.log('keyName---' + keyName2);
-  // // //       var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-  // // //       const signedUrlExpireSeconds = 60 * 5
-  // // //       url = s3.getSignedUrl('getObject', {
-  // // //         Bucket: bucketName,
-  // // //         Key: keyName2,
-  // // //         Expires: signedUrlExpireSeconds
-  // // //       });
-  // // //       console.log('------->' + url);
-  // // //       res.send(url);
-  // // //       //surl = url;
+        // AWS.config.update({
+        //   // DOWNLOAD USER
+        //   accessKeyId: process.env.S3_DOWNLOADUSER, 
+        //   secretAccessKey: process.env.S3_DOWNLOADUSERPAS
+        // });
+        // console.log('keyName---' + keyName2);
+        // var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+        // const signedUrlExpireSeconds = 60 * 5
+        // url = s3.getSignedUrl('getObject', {
+        //   Bucket: bucketName,
+        //   Key: keyName2,
+        //   Expires: signedUrlExpireSeconds
+        // });
+        // console.log('------->' + url);
+        // res.send(url);
+        //surl = url;
 
-  // // //     }).catch(
-  // // //       function (err) {
-  // // //         console.error(err, err.stack);
-  // // //         res.send(err + ',' + err.stack);
-  // // //       });
-  // // // });
+      }).catch(
+        function (err) {
+          console.error(err, err.stack);
+          res.send(err + ',' + err.stack);
+        });
+  });
 
   // AWS.config.update({
   //   // DOWNLOAD USER
