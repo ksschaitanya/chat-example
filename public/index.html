@@ -94,7 +94,15 @@
     </div>
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3CALL()">S3CHECK</button>
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3UPLOADCALL()">S3UPLOADCHECK</button>
-    <input type="file" id="file-input">
+    <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
+        <input type="file" id="file-input1">
+    </form>
+
+    <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
+        <input type="file" id="file-input2">
+    </form>
+    
+    
 
     <input class="form-control" id="token" placeholder="token" type="text">
 

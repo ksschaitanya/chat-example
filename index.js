@@ -263,6 +263,9 @@ app.post('/verifyS3CALL', (req, res) => {
 });
 
 app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (req, res) {
+
+  if (!req.file) return res.send('Please upload a file');
+
   console.log('1- ' + __dirname + '/' + req.file.path);
   console.log('2- ' + req.protocol + req.file.path);
   console.log('3- ' + req.file.path);
