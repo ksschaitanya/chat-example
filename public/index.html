@@ -99,10 +99,6 @@
         <input type="submit" name="Upload" value="Upload Photo"/>
     </form>
 
-    <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-        <label><input type="file" id="photo2" name="photo" /></label>
-        <input type="submit" name="Upload" value="Upload Photo"/>
-    </form>
     
     
 
@@ -143,8 +139,13 @@
                                 <div id="framecontrol">
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
-                                        <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
-                                        <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label>
+                                        <!-- <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
+                                        <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label> -->
+                                        <form id="{{'formID'+ x.Name}}" action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
+                                            <input type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png" name="photo" id="photo" class="input-file" id="{{'imgID'+ x.Name}}">
+                                            <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label>
+                                        </form>        
+
                                         <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.Name}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
                                     </div>
@@ -659,6 +660,9 @@
                     document.getElementById("result").innerHTML = response;
                 }
             });
+
+            document.getElementById("formID"+frameID).submit();
+
         }
 
         function resetOrientation(srcBase64, srcOrientation, callback) {
