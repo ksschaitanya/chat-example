@@ -166,8 +166,13 @@
                             <div class="card-body">
                                 <div id="framecontrol" style="text-align: center;">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <input class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
-                                        <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" />
+                                        <!-- <input class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
+                                        <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" /> -->
+                                        <form id="{{'formID'+ x.frame_code}}" action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
+                                            <input name="photo" class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
+                                            <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" />
+                                            <!-- <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label> -->
+                                        </form>  
                                         <button type="button" id="{{'btnID'+ x.frame_code}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.frame_code}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
                                     </div>
