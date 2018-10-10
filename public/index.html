@@ -588,7 +588,7 @@
             window.URL = window.URL || window.webkitURL;
 
             console.log('image ID as ', element.id);
-            var socket = io();
+           
             var file = element.files[0];
             var urlblob = window.URL.createObjectURL(file);
             //alert(urlblob);
@@ -626,6 +626,7 @@
             //     imgData: reader.result
             // });
             reader.onloadend = function () {
+                var socket = io();
                 //localStorage.setItem("frames", JSON.stringify(framesArry));
                 document.getElementById(frameID).setAttribute('src', reader.result);
                 console.log(frameID + ' orientation ' + dir);
@@ -633,7 +634,7 @@
                 socket.emit('sendImage', { 'imgsrc': reader.result, 'imgid': frameID, 'orientation': dir });
                 socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             }
-            socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+            //socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
             // socket.on('sendImage', function (msg) {
             //     console.log('RESULT', msg);
             //     $('#' + frameID).setAttribute('src', msg.imgsrc);
