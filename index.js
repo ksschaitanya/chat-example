@@ -281,6 +281,11 @@ app.post('/verifyS3UPLOADCALL', multer(multerConfig).single('photo'), function (
 
   fs.readFile(keyName, function (err, data) {
     if (err) { throw err; }
+    AWS.config.update({
+      // DOWNLOAD USER
+      accessKeyId: process.env.S3_UPLOADUSER, 
+      secretAccessKey: process.env.S3_UPLOADUSERPAS
+    });
 
     var objectParams = { Bucket: S3_BUCKET, Key: keyName2, Body: data };
     // Create object upload promise
