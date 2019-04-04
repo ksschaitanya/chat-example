@@ -95,12 +95,25 @@
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3CALL()">S3CHECK</button>
     <button type="button" class="btn btn-outline-primary" onclick="verifyS3UPLOADCALL()">S3UPLOADCHECK</button>
     <form action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-        <label><input type="file" id="photo1" name="photo" /></label>
-        <input type="submit" name="Upload" value="Upload Photo"/>
+        <label>
+            <input type="file" id="photo1" name="photo" />
+        </label>
+        <input type="submit" name="Upload" value="Upload Photo" />
     </form>
 
-    
-    
+    <form id="data" enctype="multipart/form-data" method="POST" class="ajaxed">
+        <input type="file" id="data" name="photo" onchange="NEWencodeImageFileAsURLNEW(this)" />
+        <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label>
+        <!-- <input type="submit" name="Upload" value="Upload Photo" /> -->
+    </form>
+
+    <form id="data2" enctype="multipart/form-data" method="POST" class="ajaxed">
+        <input type="file" id="data2" name="photo" onchange="NEWencodeImageFileAsURLNEW(this)" />
+        <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label>
+        <!-- <input type="submit" name="Upload" value="Upload Photo" /> -->
+    </form>
+
+
 
     <input class="form-control" id="token" placeholder="token" type="text">
 
@@ -141,10 +154,20 @@
                                         <!-- <input id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" class="btn btn-primary" style="width: 27%;"/> -->
                                         <!-- <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
                                         <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label> -->
-                                        <form id="{{'formID'+ x.Name}}" action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-                                            <input type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png" name="photo" id="photo" class="input-file" id="{{'imgID'+ x.Name}}">
+                                        <!-- old code could bethere for a reason -->
+                                        <!-- <form id="{{'formID'+ x.Name}}" class="ajaxed" enctype="multipart/form-data" method="POST">
+                                            <input type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png" name="photo" id="photo"
+                                                class="input-file" id="{{'imgID'+ x.Name}}">
                                             <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label>
-                                        </form>        
+                                        </form> -->
+                                        <!-- end of old code could bethere for a reason -->
+                                        <form id="{{'formID'+ x.frame_code}}" enctype="multipart/form-data" method="POST" class="ajaxed">
+                                            <input name="photo" class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)"
+                                                accept="image/gif, image/jpeg, image/png">
+                                            <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)"
+                                            />
+                                            <!-- <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label> -->
+                                        </form>
 
                                         <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.Name}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
@@ -168,11 +191,13 @@
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         <!-- <input class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
                                         <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" /> -->
-                                        <form id="{{'formID'+ x.frame_code}}" action="/verifyS3UPLOADCALL" enctype="multipart/form-data" method="POST">
-                                            <input name="photo" class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
-                                            <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)" />
+                                        <form id="{{'formID'+ x.frame_code}}" enctype="multipart/form-data" method="POST" class="ajaxed">
+                                            <input name="photo" class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)"
+                                                accept="image/gif, image/jpeg, image/png">
+                                            <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)"
+                                            />
                                             <!-- <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label> -->
-                                        </form>  
+                                        </form>
                                         <button type="button" id="{{'btnID'+ x.frame_code}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.frame_code}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
                                     </div>
@@ -579,16 +604,16 @@
             document.getElementById(b).click();
             //encodeImageFileAsURLNEW(document.getElementById(element.id.replace('b', '')));
             // little change
-            
+
         }
 
         // Upload Image function call
-        function encodeImageFileAsURLNEW(element) {
+        function OLDencodeImageFileAsURLNEW(element) {
 
             window.URL = window.URL || window.webkitURL;
 
             console.log('image ID as ', element.id);
-           
+
             var file = element.files[0];
             var urlblob = window.URL.createObjectURL(file);
             //alert(urlblob);
@@ -620,7 +645,7 @@
                 }
             }
 
-            
+
             // framesArry.push({
             //     Name: frameID,
             //     imgData: reader.result
@@ -667,9 +692,123 @@
                 }
             });
 
-            document.getElementById("formID"+frameID).submit();
+            document.getElementById("formID" + frameID).submit();
 
         }
+
+        // Upload Image function call
+        function encodeImageFileAsURLNEW(element) {
+
+            var frameID = element.id;
+            frameID = frameID.replace("imgID", "");
+            var dir;
+
+            var FormID = "form#formID" + frameID;
+            $(FormID).submit();
+
+            // window.URL = window.URL || window.webkitURL;
+            // console.log('image ID as ', element.id);
+            // var file = element.files[0];
+            // var urlblob = window.URL.createObjectURL(file);
+            // //alert(urlblob);
+            // var reader = new FileReader();
+            // EXIF.getData(file, function () {
+            //     dir = EXIF.getTag(this, "Orientation");
+            //     if (dir === undefined) {
+            //         localStorage.setItem("dir", 1);
+            //         dir = 1;
+            //     }
+            //     else {
+            //         localStorage.setItem("dir", dir);
+            //     }
+            // });
+        }
+
+        function NEWencodeImageFileAsURLNEW(element) {
+            var id = element.id;
+            id = "form#" + id;
+            $(id).submit();
+            //Test('form#data');
+        }
+
+        $("form.ajaxed").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            //alert(e.id);
+            var imgurl = "";
+            var token = localStorage.getItem("token");
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+
+            $.ajax({
+                url: 'http://quikpic.herokuapp.com/verifyS3UPLOADCALL',
+                type: 'POST',
+                data: formData,
+                //headers: headers,
+                success: function (data) {
+                    imgurl = data;
+                    var img = document.querySelector("#img1");
+                    img.src = imgurl;
+                    //alert(data)
+                },
+                complete: function () {
+                    var retrievedData = localStorage.getItem("frames2");
+                    var framesArry = JSON.parse(retrievedData);
+                    var frameIDParam = 0;
+                    var frameID = this.id;
+                    frameID = 'Stqjb';//frameID.replace("formID", "");
+
+                    for (var i = 0; i < framesArry.length; i++) {
+                        if (framesArry[i].frame_code === frameID) {
+                            frameIDParam = framesArry[i].frame_id;
+                            break;
+                        }
+                    }
+                    var token = localStorage.getItem("token");
+                    var headers = {};
+                    if (token) {
+                        headers.Authorization = 'Bearer ' + token;
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: apiURL + "api/Frame",
+                        //data: { "email": "ksschaitanya@gmail.com", "password": "Test0011!" },
+                        data: {
+                            "frame_id": frameIDParam,
+                            "frame_code": frameID,
+                            "frame_size": "s",
+                            "display_name": "Kitchen",
+                            "image_url": imgurl,
+                            "picture": "",
+                            "dateupdated": "2018-08-28T17:32:50.940559-04:00",
+                            "deleted": false
+                        },
+                        headers: headers,
+                        dataType: 'json',
+                        success: function (response) {
+                            alert(response);
+                            // document.getElementById("result").innerHTML = response;
+                            // var socket = io();
+                            // document.getElementById(frameID).setAttribute('src', data);
+                            // console.log(frameID + ' orientation ' + dir);
+                            // alert(' orientation : ' + dir);
+                            // socket.emit('sendImage', { 'imgsrc': data, 'imgid': frameID, 'orientation': dir });
+                            // socket.emit('rotateImage', { 'direction': dir, 'imgid': frameID });
+                        }
+                    });
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+
+            // //  var img = document.querySelector("#img1");
+            // //  img.src = imgurl; //JSON.parse(imgurl).s3url;   
+
+        });
+
 
         function resetOrientation(srcBase64, srcOrientation, callback) {
             var img = new Image();
@@ -868,7 +1007,7 @@
         function getSignedRequest(file) {
             console.log("verifyJWT here");
             var xhttp = new XMLHttpRequest();
-            data={fileName:file.name,fileType:file.type};
+            data = { fileName: file.name, fileType: file.type };
             console.log(file);
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -886,25 +1025,25 @@
             xhttp.send(file);
         }
 
-            /*
-     Function called when file input updated. If there is a file selected, then
-     start upload procedure by asking for a signed request from the app.
-    */
-    function initUpload(){
-      const files = document.getElementById('file-input').files;
-      const file = files[0];
-      if(file == null){
-        return alert('No file selected.');
-      }
-      getSignedRequest(file);
-    }
+        /*
+ Function called when file input updated. If there is a file selected, then
+ start upload procedure by asking for a signed request from the app.
+*/
+        function initUpload() {
+            const files = document.getElementById('file-input').files;
+            const file = files[0];
+            if (file == null) {
+                return alert('No file selected.');
+            }
+            getSignedRequest(file);
+        }
 
-    /*
-     Bind listeners when the page loads.
-    */
-    (() => {
-        document.getElementById('file-input').onchange = initUpload;
-    })();
+        /*
+         Bind listeners when the page loads.
+        */
+        (() => {
+            document.getElementById('file-input').onchange = initUpload;
+        })();
 
 
     </script>
