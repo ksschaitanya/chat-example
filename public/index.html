@@ -155,20 +155,12 @@
                                         <!-- <input class="input-file" id="{{'imgID'+ x.Name}}" type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png">
                                         <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">Upload</label> -->
                                         <!-- old code could bethere for a reason -->
-                                        <!-- <form id="{{'formID'+ x.Name}}" class="ajaxed" enctype="multipart/form-data" method="POST">
+                                        <form id="{{'formID'+ x.Name}}" class="ajaxed" enctype="multipart/form-data" method="POST">
                                             <input type="file" onchange="encodeImageFileAsURLNEW(this)" accept="image/gif, image/jpeg, image/png" name="photo" id="photo"
                                                 class="input-file" id="{{'imgID'+ x.Name}}">
                                             <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label>
                                         </form> -->
-                                        <!-- end of old code could bethere for a reason -->
-                                        <form id="{{'formID'+ x.frame_code}}" enctype="multipart/form-data" method="POST" class="ajaxed">
-                                            <input name="photo" class="input-file" id="{{'imgID'+ x.frame_code}}" type="file" onchange="encodeImageFileAsURLNEW(this)"
-                                                accept="image/gif, image/jpeg, image/png">
-                                            <input id="{{'imgID'+ x.frame_code + 'b'}}" type="button" value="Upload" class="btn btn-mint" onclick="openDialog(this)"
-                                            />
-                                            <!-- <label tabindex="0" for="{{'imgID'+ x.Name}}" class="input-file-trigger">UploadXX</label> -->
-                                        </form>
-
+                                        
                                         <button type="button" id="{{'btnID'+ x.Name}}" onclick="RotateImage(this)" class="btn btn-mint">Rotate</button>
                                         <button type="button" id="{{'refreshID'+ x.Name}}" onclick="myFunction(this)" class="btn btn-mint">Reset</button>
                                     </div>
